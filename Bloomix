@@ -6104,31 +6104,11 @@ end
 
 section(Settings, "UI BACKGROUND", 20)
 do
-local bgRow = Instance.new("Frame")
-bgRow.Name = "UI Background"
-bgRow.BackgroundColor3 = COLORS.row
-bgRow.BackgroundTransparency = 0.72
+local bgRow = baseRow(Settings, "UI Background", 21)
 bgRow.Size = UDim2.new(1, -4, 0, 42)
-bgRow.BorderSizePixel = 0
-bgRow.LayoutOrder = 21
-bgRow.ZIndex = 4
-bgRow.Parent = Settings
-corner(bgRow, 14)
-stroke(bgRow, Color3.fromRGB(200, 130, 220), 1.15, 0.25)
-local bgLabel = Instance.new("TextLabel")
-bgLabel.Name = "Label"
-bgLabel.BackgroundTransparency = 1
-bgLabel.Text = "Background"
-bgLabel.TextColor3 = Color3.fromRGB(240, 210, 255)
-bgLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-bgLabel.TextStrokeTransparency = 0.25
-bgLabel.TextSize = 12
-bgLabel.Font = Enum.Font.GothamSemibold
-bgLabel.TextXAlignment = Enum.TextXAlignment.Left
-bgLabel.Position = UDim2.new(0, 12, 0, 0)
-bgLabel.Size = UDim2.new(0, 90, 1, 0)
-bgLabel.ZIndex = 5
-bgLabel.Parent = bgRow
+bgRow.ClipsDescendants = true
+local lbl = bgRow:FindFirstChild("Label")
+if lbl then lbl.Size = UDim2.new(0, 92, 1, 0); lbl.TextSize = 11 end
 local btnPrev = Instance.new("TextButton")
 btnPrev.Name = "BgPrev"
 btnPrev.Size = UDim2.new(0, 26, 0, 26)
@@ -6144,7 +6124,7 @@ btnPrev.AutoButtonColor = false
 btnPrev.ZIndex = 6
 btnPrev.Parent = bgRow
 corner(btnPrev, 12)
-stroke(btnPrev, Color3.fromRGB(220, 130, 255), 1, 0.3)
+stroke(btnPrev, COLORS.stroke, 1, 0.3)
 local bgNameLabel = Instance.new("TextLabel")
 bgNameLabel.Name = "BgNameLabel"
 bgNameLabel.BackgroundTransparency = 1
@@ -6175,7 +6155,7 @@ btnNext.AutoButtonColor = false
 btnNext.ZIndex = 6
 btnNext.Parent = bgRow
 corner(btnNext, 12)
-stroke(btnNext, Color3.fromRGB(220, 130, 255), 1, 0.3)
+stroke(btnNext, COLORS.stroke, 1, 0.3)
 btnPrev.Activated:Connect(function()
 local idx = ((currentBackground - 1) % #BG_PHOTOS)
 applyBackground(idx)
