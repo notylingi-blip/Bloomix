@@ -787,11 +787,13 @@ if token ~= introPlaybackToken or not _introEnabled then if sound then pcall(fun
 introPlaybackSound = sound
 if not sound then _safeNotify("SONG FAILED"); return end
 sound.TimePosition = 0
-sound.Looped = true
+sound.Looped = false
 local loadStart = tick()
 while sound and not sound.IsLoaded and tick() - loadStart < 10 do task.wait(0.05) end
 pcall(function() sound:Play() end)
--- Musik terus jalan sampai di-stop manual (tidak ada cutoff 15 detik)
+sound.Ended:Connect(function()
+stopIntroPlayback()
+end)
 end)
 end
 preloadIntroSongs()
@@ -1047,6 +1049,7 @@ end
 if data.introEnabled ~= nil then _introEnabled = data.introEnabled == true end
 if data.selectedIntroMusic and INTRO_MUSIC_OPTIONS[data.selectedIntroMusic] then selectedIntroMusic = data.selectedIntroMusic end
 if autoLeftEnabled and autoRightEnabled then autoRightEnabled = false end
+if type(data.currentBackground) == "number" then currentBackground = data.currentBackground end
 end
 loadAceConfig()
 local function syncAnimationPackIndex()
@@ -3388,14 +3391,14 @@ end
 end)
 local COLORS = {
 bg = Color3.fromRGB(18, 8, 28),
-row = Color3.fromRGB(35, 15, 55),
-row2 = Color3.fromRGB(40, 18, 60),
-stroke = Color3.fromRGB(200, 130, 220),
-strokeSoft = Color3.fromRGB(150, 100, 200),
+row = Color3.fromRGB(220, 80, 140),
+row2 = Color3.fromRGB(230, 100, 155),
+stroke = Color3.fromRGB(255, 160, 200),
+strokeSoft = Color3.fromRGB(255, 130, 180),
 white = Color3.fromRGB(255, 255, 255),
-textDim = Color3.fromRGB(220, 180, 240),
-toggleBg = Color3.fromRGB(50, 20, 70),
-knob = Color3.fromRGB(255, 180, 220),
+textDim = Color3.fromRGB(255, 220, 235),
+toggleBg = Color3.fromRGB(200, 60, 110),
+knob = Color3.fromRGB(255, 200, 220),
 }
 function corner(parent, radius)
 local c = Instance.new("UICorner")
@@ -3480,7 +3483,7 @@ Main.BorderSizePixel = 0
 Main.Active = true
 Main.ClipsDescendants = false
 Main.Parent = Gui
-corner(Main, 14)
+corner(Main, 22)
 stroke(Main, Color3.fromRGB(220, 130, 240), 1.5, 0.05)
 makeDraggable(Main)
 Main:GetPropertyChangedSignal("Position"):Connect(function()
@@ -3599,14 +3602,23 @@ Main.Size = FULL_MAIN_SIZE
 savedMainPositionTable = udim2ToTable(Main.Position)
 end)
 end
+local _bgPhotoLabel = nil
+local BG_PHOTOS = {
+{name = "Default",  id = "rbxassetid://90491158154566"},
+{name = "Foto 1",   id = "rbxassetid://93829600421183"},
+{name = "Foto 2",   id = "rbxassetid://77058607072846"},
+{name = "Foto 3",   id = "rbxassetid://97594290229050"},
+}
 local BackgroundIDs = {}
-currentBackground = 0
-local BgImage = Instance.new("Frame")
+local BgImage = Instance.new("ImageLabel")
 BgImage.Name = "CustomBackground"
 BgImage.BackgroundTransparency = 1
+BgImage.Image = (BG_PHOTOS[currentBackground + 1] and BG_PHOTOS[currentBackground + 1].id) or BG_PHOTOS[1].id
+BgImage.ScaleType = Enum.ScaleType.Crop
+BgImage.ImageTransparency = 0
 BgImage.Size = UDim2.new(1, 0, 1, 0)
 BgImage.Position = UDim2.new(0, 0, 0, 0)
-BgImage.Visible = false
+BgImage.Visible = true
 BgImage.ZIndex = 1
 BgImage.Parent = Main
 local MainGradient = Instance.new("UIGradient")
@@ -3618,9 +3630,15 @@ ColorSequenceKeypoint.new(1, Color3.fromRGB(130, 200, 255)),
 MainGradient.Rotation = 135
 MainGradient.Parent = Main
 function applyBackground(index)
-currentBackground = 0
+local idx = tonumber(index) or 0
+if idx < 0 or idx >= #BG_PHOTOS then idx = 0 end
+currentBackground = idx
+local photo = BG_PHOTOS[idx + 1] or BG_PHOTOS[1]
+BgImage.Image = photo.id
+BgImage.Visible = true
+if _bgPhotoLabel then _bgPhotoLabel.Text = photo.name end
 saveAceConfig()
-return "None"
+return photo.name
 end
 applyBackground(currentBackground)
 local LogoIcon = Instance.new("Frame")
@@ -3632,7 +3650,7 @@ LogoIcon.Size = UDim2.new(0, 58, 0, 58)
 LogoIcon.Position = UDim2.new(0, 16, 0, 17)
 LogoIcon.ZIndex = 6
 LogoIcon.Parent = Main
-corner(LogoIcon, 12)
+corner(LogoIcon, 18)
 local logoGrad = Instance.new("UIGradient")
 logoGrad.Color = ColorSequence.new({
 ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 160, 220)),
@@ -3702,7 +3720,7 @@ Close.Position = UDim2.new(1, -42, 0, 14)
 Close.AutoButtonColor = false
 Close.ZIndex = 5
 Close.Parent = Main
-corner(Close, 8)
+corner(Close, 14)
 stroke(Close, COLORS.stroke, 1, 0.35)
 AceLockTopButton = Instance.new("TextButton")
 AceLockTopButton.Name = "LockGUI"
@@ -3716,7 +3734,7 @@ AceLockTopButton.Position = UDim2.new(1, -78, 0, 14)
 AceLockTopButton.AutoButtonColor = false
 AceLockTopButton.ZIndex = 5
 AceLockTopButton.Parent = Main
-corner(AceLockTopButton, 8)
+corner(AceLockTopButton, 14)
 stroke(AceLockTopButton, COLORS.stroke, 1, 0.35)
 function AceUpdateGuiLockVisual()
 if AceLockTopButton then
@@ -3841,7 +3859,7 @@ btn.Font = Enum.Font.GothamBlack
 btn.AutoButtonColor = false
 btn.ZIndex = 4
 btn.Parent = Tabs
-corner(btn, 8)
+corner(btn, 14)
 local btnGrad = Instance.new("UIGradient")
 btnGrad.Color = ColorSequence.new({
 ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 150, 210)),
@@ -3880,13 +3898,13 @@ function baseRow(parent, labelText, order)
 local row = Instance.new("Frame")
 row.Name = labelText
 row.BackgroundColor3 = COLORS.row
-row.BackgroundTransparency = 0.3
+row.BackgroundTransparency = 0.72
 row.Size = UDim2.new(1, -4, 0, 34)
 row.BorderSizePixel = 0
 row.LayoutOrder = order
 row.ZIndex = 4
 row.Parent = parent
-corner(row, 9)
+corner(row, 14)
 stroke(row, Color3.fromRGB(200, 130, 220), 1.15, 0.25)
 local label = Instance.new("TextLabel")
 label.Name = "Label"
@@ -3903,10 +3921,10 @@ label.Size = UDim2.new(1, -132, 1, 0)
 label.ZIndex = 5
 label.Parent = row
 row.MouseEnter:Connect(function()
-tween(row, {BackgroundTransparency = 0.22})
+tween(row, {BackgroundTransparency = 0.55})
 end)
 row.MouseLeave:Connect(function()
-tween(row, {BackgroundTransparency = 0.3})
+tween(row, {BackgroundTransparency = 0.72})
 end)
 return row
 end
@@ -3926,7 +3944,7 @@ box.Position = UDim2.new(1, -68, 0.5, -12)
 box.BorderSizePixel = 0
 box.ZIndex = 6
 box.Parent = row
-corner(box, 7)
+corner(box, 12)
 stroke(box, COLORS.strokeSoft, 1, 0.45)
 return row, box
 end
@@ -3950,7 +3968,7 @@ track.Position = UDim2.new(1, -44, 0.5, -9)
 track.BorderSizePixel = 0
 track.ZIndex = 5
 track.Parent = button
-corner(track, 9)
+corner(track, 14)
 stroke(track, COLORS.strokeSoft, 1, 0.45)
 local knob = Instance.new("Frame")
 knob.Name = "Knob"
@@ -3996,7 +4014,7 @@ Transparency = state and 0.08 or 0.38,
 Thickness = state and 1.3 or 1.15
 })
 end
-tween(row, {BackgroundTransparency = state and 0.12 or 0.3})
+tween(row, {BackgroundTransparency = state and 0.45 or 0.72})
 end
 setVisual(state)
 button.Activated:Connect(function()
@@ -4031,7 +4049,7 @@ track.Position = UDim2.new(1, -44, 0.5, -9)
 track.BorderSizePixel = 0
 track.ZIndex = 5
 track.Parent = button
-corner(track, 9)
+corner(track, 14)
 stroke(track, COLORS.strokeSoft, 1, 0.45)
 local knob = Instance.new("Frame")
 knob.Name = "Knob"
@@ -4076,7 +4094,7 @@ Transparency = state and 0.08 or 0.38,
 Thickness = state and 1.3 or 1.15
 })
 end
-tween(row, {BackgroundTransparency = state and 0.12 or 0.3})
+tween(row, {BackgroundTransparency = state and 0.45 or 0.72})
 end
 setVisual(default)
 return row, setVisual, button
@@ -4096,7 +4114,7 @@ select.Position = UDim2.new(1, -80, 0.5, -12)
 select.BorderSizePixel = 0
 select.ZIndex = 6
 select.Parent = row
-corner(select, 7)
+corner(select, 12)
 stroke(select, COLORS.strokeSoft, 1, 0.45)
 return row, select
 end
@@ -4128,7 +4146,7 @@ left.Position = UDim2.new(1, -156, 0.5, -14)
 left.BorderSizePixel = 0
 left.ZIndex = 6
 left.Parent = row
-corner(left, 8)
+corner(left, 12)
 stroke(left, COLORS.strokeSoft, 1, 0.45)
 animationPackValueLabel = Instance.new("TextLabel")
 animationPackValueLabel.Name = "AnimationPackValue"
@@ -4157,7 +4175,7 @@ right.Position = UDim2.new(1, -48, 0.5, -14)
 right.BorderSizePixel = 0
 right.ZIndex = 6
 right.Parent = row
-corner(right, 8)
+corner(right, 12)
 stroke(right, COLORS.strokeSoft, 1, 0.45)
 local function setPackIndex(nextIndex)
 if nextIndex < 1 then nextIndex = #AnimationPackList end
@@ -4219,7 +4237,7 @@ btn.BorderSizePixel = 0
 btn.ZIndex = 6
 btn.AutoButtonColor = false
 btn.Parent = row
-corner(btn, 7)
+corner(btn, 12)
 stroke(btn, COLORS.strokeSoft, 1, 0.45)
 local clearBtn = Instance.new("TextButton")
 clearBtn.Name = "ClearKeybindButton"
@@ -4235,7 +4253,7 @@ clearBtn.BorderSizePixel = 0
 clearBtn.ZIndex = 6
 clearBtn.AutoButtonColor = false
 clearBtn.Parent = row
-corner(clearBtn, 7)
+corner(clearBtn, 12)
 stroke(clearBtn, COLORS.strokeSoft, 1, 0.45)
 tpDownKeybindButton = btn
 btn.Activated:Connect(function()
@@ -4272,7 +4290,7 @@ btn.BorderSizePixel = 0
 btn.ZIndex = 6
 btn.AutoButtonColor = false
 btn.Parent = row
-corner(btn, 7)
+corner(btn, 12)
 stroke(btn, COLORS.strokeSoft, 1, 0.45)
 local clearBtn = Instance.new("TextButton")
 clearBtn.Name = "ClearKeybindButton"
@@ -4288,7 +4306,7 @@ clearBtn.BorderSizePixel = 0
 clearBtn.ZIndex = 6
 clearBtn.AutoButtonColor = false
 clearBtn.Parent = row
-corner(clearBtn, 7)
+corner(clearBtn, 12)
 stroke(clearBtn, COLORS.strokeSoft, 1, 0.45)
 speedKeybindButtons[keyId] = btn
 btn.Activated:Connect(function()
@@ -4421,7 +4439,7 @@ holder.LayoutOrder = order
 holder.ZIndex = 4
 holder.ClipsDescendants = true
 holder.Parent = parent
-corner(holder, 9)
+corner(holder, 14)
 stroke(holder, COLORS.strokeSoft, 1.15, 0.38)
 local slide = Instance.new("Frame")
 slide.Name = "SelectedSlide"
@@ -4432,7 +4450,7 @@ slide.Position = UDim2.new(0, 4, 0, 4)
 slide.BorderSizePixel = 0
 slide.ZIndex = 5
 slide.Parent = holder
-corner(slide, 9)
+corner(slide, 14)
 local slideStroke = Instance.new("UIStroke")
 slideStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 slideStroke.Color = Color3.fromRGB(235, 235, 245)
@@ -4542,7 +4560,7 @@ holder.LayoutOrder = order
 holder.ZIndex = 4
 holder.ClipsDescendants = true
 holder.Parent = parent
-corner(holder, 9)
+corner(holder, 14)
 stroke(holder, COLORS.strokeSoft, 1.15, 0.38)
 local slide = Instance.new("Frame")
 slide.Name = "SelectedSlide"
@@ -4553,7 +4571,7 @@ slide.Position = UDim2.new(0, 4, 0, 4)
 slide.BorderSizePixel = 0
 slide.ZIndex = 5
 slide.Parent = holder
-corner(slide, 9)
+corner(slide, 14)
 local slideStroke = Instance.new("UIStroke")
 slideStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 slideStroke.Color = Color3.fromRGB(235, 235, 245)
@@ -5026,7 +5044,7 @@ hl.OutlineColor=Color3.fromRGB(245,245,245); hl.OutlineTransparency=0; hl.DepthM
 local bb=Instance.new("BillboardGui")
 bb.Name="AceDuelsESPTag"; bb.Adornee=head; bb.Size=UDim2.new(0,124,0,34); bb.StudsOffset=Vector3.new(0,2.7,0); bb.AlwaysOnTop=true; bb.LightInfluence=0; bb.Parent=head
 local box=Instance.new("Frame",bb); box.Size=UDim2.new(1,0,1,0); box.BackgroundTransparency=1; box.BorderSizePixel=0
-Instance.new("UICorner",box).CornerRadius=UDim.new(0,9)
+Instance.new("UICorner",box).CornerRadius=UDim.new(0,14)
 local n=Instance.new("TextLabel",box); n.Size=UDim2.new(1,-10,0,17); n.Position=UDim2.new(0,5,0,2); n.BackgroundTransparency=1; n.TextColor3=Color3.fromRGB(255,255,255); n.Font=Enum.Font.GothamBlack; n.TextSize=15; n.TextStrokeTransparency=0.38
 local sub=Instance.new("TextLabel",box); sub.Size=UDim2.new(1,-10,0,11); sub.Position=UDim2.new(0,5,0,19); sub.BackgroundTransparency=1; sub.TextColor3=Color3.fromRGB(180,180,180); sub.Font=Enum.Font.GothamBold; sub.TextSize=10; sub.TextStrokeTransparency=0.58
 local conn=RunService.Heartbeat:Connect(function()
@@ -5696,7 +5714,7 @@ left.BorderSizePixel = 0
 left.ZIndex = 8
 left.AutoButtonColor = false
 left.Parent = row
-corner(left, 8)
+corner(left, 12)
 stroke(left, COLORS.strokeSoft, 1, 0.42)
 local holder = Instance.new("Frame")
 holder.Name = "SkyValueHolder"
@@ -5708,7 +5726,7 @@ holder.Position = UDim2.new(1, -139, 0.5, -14)
 holder.ClipsDescendants = true
 holder.ZIndex = 7
 holder.Parent = row
-corner(holder, 8)
+corner(holder, 12)
 stroke(holder, Color3.fromRGB(235, 235, 245), 1, 0.35)
 local smoky = Instance.new("ImageLabel")
 smoky.Name = "SmokyBackground"
@@ -5749,7 +5767,7 @@ right.BorderSizePixel = 0
 right.ZIndex = 8
 right.AutoButtonColor = false
 right.Parent = row
-corner(right, 8)
+corner(right, 12)
 stroke(right, COLORS.strokeSoft, 1, 0.42)
 local function setSkyIndex(nextIndex)
 if nextIndex < 1 then nextIndex = #skyThemes end
@@ -5951,13 +5969,13 @@ function stepperRow(parent, labelText, defaultValue, order, callback, minValue, 
 local row = Instance.new("Frame")
 row.Name = labelText
 row.BackgroundColor3 = COLORS.row
-row.BackgroundTransparency = 0.22
+row.BackgroundTransparency = 0.72
 row.Size = UDim2.new(1, -4, 0, 42)
 row.BorderSizePixel = 0
 row.LayoutOrder = order
 row.ZIndex = 4
 row.Parent = parent
-corner(row, 10)
+corner(row, 14)
 stroke(row, COLORS.strokeSoft, 1.15, 0.32)
 local label = Instance.new("TextLabel")
 label.Name = "Label"
@@ -5988,7 +6006,7 @@ minus.Size = UDim2.new(0, 28, 0, 26)
 minus.Position = UDim2.new(1, -118, 0.5, -13)
 minus.ZIndex = 6
 minus.Parent = row
-corner(minus, 7)
+corner(minus, 12)
 stroke(minus, COLORS.strokeSoft, 1, 0.5)
 local valueBox = Instance.new("TextLabel")
 valueBox.Name = "Value"
@@ -6004,7 +6022,7 @@ valueBox.Size = UDim2.new(0, 48, 0, 26)
 valueBox.Position = UDim2.new(1, -84, 0.5, -13)
 valueBox.ZIndex = 6
 valueBox.Parent = row
-corner(valueBox, 7)
+corner(valueBox, 12)
 stroke(valueBox, COLORS.strokeSoft, 1, 0.5)
 local plus = Instance.new("TextButton")
 plus.Name = "Plus"
@@ -6020,7 +6038,7 @@ plus.Size = UDim2.new(0, 28, 0, 26)
 plus.Position = UDim2.new(1, -30, 0.5, -13)
 plus.ZIndex = 6
 plus.Parent = row
-corner(plus, 7)
+corner(plus, 12)
 stroke(plus, COLORS.strokeSoft, 1, 0.5)
 local function setValue(nextValue)
 value = math.clamp(math.floor((nextValue * 100) + 0.5) / 100, minValue or 0.50, maxValue or 1.50)
@@ -6069,7 +6087,7 @@ button.Size = UDim2.new(0, 78, 0, 26)
 button.Position = UDim2.new(1, -88, 0.5, -13)
 button.ZIndex = 7
 button.Parent = row
-corner(button, 8)
+corner(button, 12)
 stroke(button, Color3.fromRGB(255, 255, 255), 1, 0.18)
 button.Activated:Connect(function()
 if _G.AceResetMobileButtons then
@@ -6084,6 +6102,89 @@ end
 end)
 end
 
+section(Settings, "UI BACKGROUND", 20)
+do
+local bgRow = Instance.new("Frame")
+bgRow.Name = "UI Background"
+bgRow.BackgroundColor3 = COLORS.row
+bgRow.BackgroundTransparency = 0.72
+bgRow.Size = UDim2.new(1, -4, 0, 42)
+bgRow.BorderSizePixel = 0
+bgRow.LayoutOrder = 21
+bgRow.ZIndex = 4
+bgRow.Parent = Settings
+corner(bgRow, 14)
+stroke(bgRow, Color3.fromRGB(200, 130, 220), 1.15, 0.25)
+local bgLabel = Instance.new("TextLabel")
+bgLabel.Name = "Label"
+bgLabel.BackgroundTransparency = 1
+bgLabel.Text = "Background"
+bgLabel.TextColor3 = Color3.fromRGB(240, 210, 255)
+bgLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+bgLabel.TextStrokeTransparency = 0.25
+bgLabel.TextSize = 12
+bgLabel.Font = Enum.Font.GothamSemibold
+bgLabel.TextXAlignment = Enum.TextXAlignment.Left
+bgLabel.Position = UDim2.new(0, 12, 0, 0)
+bgLabel.Size = UDim2.new(0, 90, 1, 0)
+bgLabel.ZIndex = 5
+bgLabel.Parent = bgRow
+local btnPrev = Instance.new("TextButton")
+btnPrev.Name = "BgPrev"
+btnPrev.Size = UDim2.new(0, 26, 0, 26)
+btnPrev.Position = UDim2.new(1, -120, 0.5, -13)
+btnPrev.BackgroundColor3 = Color3.fromRGB(180, 80, 160)
+btnPrev.BackgroundTransparency = 0.3
+btnPrev.BorderSizePixel = 0
+btnPrev.Text = "<"
+btnPrev.TextColor3 = Color3.fromRGB(255, 255, 255)
+btnPrev.TextSize = 13
+btnPrev.Font = Enum.Font.GothamBlack
+btnPrev.AutoButtonColor = false
+btnPrev.ZIndex = 6
+btnPrev.Parent = bgRow
+corner(btnPrev, 12)
+stroke(btnPrev, Color3.fromRGB(220, 130, 255), 1, 0.3)
+local bgNameLabel = Instance.new("TextLabel")
+bgNameLabel.Name = "BgNameLabel"
+bgNameLabel.BackgroundTransparency = 1
+bgNameLabel.Text = (BG_PHOTOS[currentBackground + 1] and BG_PHOTOS[currentBackground + 1].name) or "Default"
+bgNameLabel.TextColor3 = Color3.fromRGB(255, 220, 255)
+bgNameLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+bgNameLabel.TextStrokeTransparency = 0.3
+bgNameLabel.TextSize = 11
+bgNameLabel.Font = Enum.Font.GothamSemibold
+bgNameLabel.TextXAlignment = Enum.TextXAlignment.Center
+bgNameLabel.Position = UDim2.new(1, -92, 0, 0)
+bgNameLabel.Size = UDim2.new(0, 62, 1, 0)
+bgNameLabel.ZIndex = 6
+bgNameLabel.Parent = bgRow
+_bgPhotoLabel = bgNameLabel
+local btnNext = Instance.new("TextButton")
+btnNext.Name = "BgNext"
+btnNext.Size = UDim2.new(0, 26, 0, 26)
+btnNext.Position = UDim2.new(1, -28, 0.5, -13)
+btnNext.BackgroundColor3 = Color3.fromRGB(180, 80, 160)
+btnNext.BackgroundTransparency = 0.3
+btnNext.BorderSizePixel = 0
+btnNext.Text = ">"
+btnNext.TextColor3 = Color3.fromRGB(255, 255, 255)
+btnNext.TextSize = 13
+btnNext.Font = Enum.Font.GothamBlack
+btnNext.AutoButtonColor = false
+btnNext.ZIndex = 6
+btnNext.Parent = bgRow
+corner(btnNext, 12)
+stroke(btnNext, Color3.fromRGB(220, 130, 255), 1, 0.3)
+btnPrev.Activated:Connect(function()
+local idx = ((currentBackground - 1) % #BG_PHOTOS)
+applyBackground(idx)
+end)
+btnNext.Activated:Connect(function()
+local idx = ((currentBackground + 1) % #BG_PHOTOS)
+applyBackground(idx)
+end)
+end
 section(Settings, "INTRO", 50)
 do
 local btnShapeIndex = 1
@@ -6108,7 +6209,7 @@ left.BorderSizePixel = 0
 left.ZIndex = 8
 left.AutoButtonColor = false
 left.Parent = row
-corner(left, 8)
+corner(left, 12)
 stroke(left, COLORS.strokeSoft, 1, 0.42)
 local valHolder = Instance.new("Frame")
 valHolder.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
@@ -6147,7 +6248,7 @@ right.BorderSizePixel = 0
 right.ZIndex = 8
 right.AutoButtonColor = false
 right.Parent = row
-corner(right, 8)
+corner(right, 12)
 stroke(right, COLORS.strokeSoft, 1, 0.42)
 local function setShapeIndex(i)
 if i < 1 then i = #BUTTON_SHAPES end
@@ -6179,13 +6280,13 @@ do
 local row = Instance.new("Frame")
 row.Name = "Intro Song"
 row.BackgroundColor3 = COLORS.row
-row.BackgroundTransparency = 0.22
+row.BackgroundTransparency = 0.72
 row.Size = UDim2.new(1, -4, 0, 42)
 row.BorderSizePixel = 0
 row.LayoutOrder = 52
 row.ZIndex = 4
 row.Parent = Settings
-corner(row, 10)
+corner(row, 14)
 stroke(row, COLORS.strokeSoft, 1.15, 0.32)
 local label = Instance.new("TextLabel")
 label.Name = "Label"
@@ -6215,7 +6316,7 @@ btn.Size = UDim2.new(0, 118, 0, 28)
 btn.Position = UDim2.new(1, -128, 0.5, -14)
 btn.ZIndex = 6
 btn.Parent = row
-corner(btn, 8)
+corner(btn, 14)
 stroke(btn, Color3.fromRGB(255,255,255), 1, 0.15)
 setIntroSongVisual = function()
 if btn and btn.Parent then btn.Text = getIntroSongName(); btn.TextColor3 = Color3.fromRGB(0,0,0) end
