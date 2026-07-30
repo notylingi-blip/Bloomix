@@ -5201,7 +5201,7 @@ local atm=Instance.new("Atmosphere"); atm:SetAttribute("_AceDuelsSky",true); atm
 local sky=Instance.new("Sky"); sky:SetAttribute("_AceDuelsSky",true); sky.StarCount=(mode=="Galaxy" or mode=="Deep Space") and 10000 or 2000; sky.Parent=Lighting
 skyTheme=mode
 end
-_G.AceStretchFOV = _G.AceStretchFOV or 120
+_G.AceStretchFOV = _G.AceStretchFOV or 160
 function enableStretchRez()
 fpsBoostEnabled=true
 local cam=workspace.CurrentCamera
@@ -5894,7 +5894,7 @@ do
 local _, box = textboxRow(Utility, "FOV Value", tostring(fovValue), 13)
 box.FocusLost:Connect(function()
 local v = tonumber(box.Text)
-if v and v >= 30 and v <= 120 then
+if v and v >= 30 and v <= 160 then
 fovValue = v
 if fovEnabled and workspace.CurrentCamera then workspace.CurrentCamera.FieldOfView = fovValue end
 end
