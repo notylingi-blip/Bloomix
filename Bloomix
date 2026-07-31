@@ -3483,7 +3483,7 @@ Main.BorderSizePixel = 0
 Main.Active = true
 Main.ClipsDescendants = false
 Main.Parent = Gui
-corner(Main, 22)
+corner(Main, 26)
 stroke(Main, Color3.fromRGB(220, 130, 240), 1.5, 0.05)
 makeDraggable(Main)
 Main:GetPropertyChangedSignal("Position"):Connect(function()
@@ -3757,8 +3757,8 @@ AceUpdateGuiLockVisual()
 local Content = Instance.new("Frame")
 Content.Name = "Content"
 Content.BackgroundTransparency = 1
-Content.Position = UDim2.new(0, 76, 0, 105)
-Content.Size = UDim2.new(1, -86, 1, -115)
+Content.Position = UDim2.new(0, 82, 0, 105)
+Content.Size = UDim2.new(1, -92, 1, -115)
 Content.ZIndex = 3
 Content.Parent = Main
 local Tabs = Instance.new("Frame")
@@ -3766,7 +3766,7 @@ Tabs.Name = "Tabs"
 Tabs.BackgroundColor3 = Color3.fromRGB(30, 10, 45)
 Tabs.BackgroundTransparency = 0.1
 Tabs.Position = UDim2.new(0, 0, 0, 100)
-Tabs.Size = UDim2.new(0, 70, 1, -100)
+Tabs.Size = UDim2.new(0, 76, 1, -100)
 Tabs.ZIndex = 3
 Tabs.Parent = Main
 local tabBg = Instance.new("UIGradient")
@@ -3782,11 +3782,15 @@ NumberSequenceKeypoint.new(1, 0.75),
 tabBg.Parent = Tabs
 local TabLayout = Instance.new("UIListLayout")
 TabLayout.FillDirection = Enum.FillDirection.Vertical
-TabLayout.Padding = UDim.new(0, 4)
+TabLayout.Padding = UDim.new(0, 6)
 TabLayout.SortOrder = Enum.SortOrder.LayoutOrder
 TabLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 TabLayout.VerticalAlignment = Enum.VerticalAlignment.Top
 TabLayout.Parent = Tabs
+local TabPadding = Instance.new("UIPadding")
+TabPadding.PaddingTop = UDim.new(0, 8)
+TabPadding.PaddingBottom = UDim.new(0, 8)
+TabPadding.Parent = Tabs
 local pages = {}
 local tabButtons = {}
 local tabNames = {"MOVEMENT", "COMBAT", "KEYBINDS", "VISUALS", "SETTINGS"}
@@ -3845,7 +3849,7 @@ for _, name in ipairs(tabNames) do
 addPage(name)
 local btn = Instance.new("TextButton")
 btn.Name = name
-btn.Size = UDim2.new(0, 60, 0, 40)
+btn.Size = UDim2.new(0, 66, 0, 50)
 btn.BackgroundColor3 = Color3.fromRGB(180, 80, 160)
 btn.BackgroundTransparency = 0.72
 btn.BorderSizePixel = 0
@@ -3853,13 +3857,13 @@ btn.Text = name
 btn.TextColor3 = Color3.fromRGB(240, 200, 255)
 btn.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
 btn.TextStrokeTransparency = 0.35
-btn.TextSize = 7
+btn.TextSize = 8
 btn.TextWrapped = true
 btn.Font = Enum.Font.GothamBlack
 btn.AutoButtonColor = false
 btn.ZIndex = 4
 btn.Parent = Tabs
-corner(btn, 14)
+corner(btn, 16)
 local btnGrad = Instance.new("UIGradient")
 btnGrad.Color = ColorSequence.new({
 ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 150, 210)),
@@ -3897,15 +3901,29 @@ end
 function baseRow(parent, labelText, order)
 local row = Instance.new("Frame")
 row.Name = labelText
-row.BackgroundColor3 = COLORS.row
-row.BackgroundTransparency = 0.72
-row.Size = UDim2.new(1, -4, 0, 34)
+row.BackgroundColor3 = Color3.fromRGB(220, 80, 140)
+row.BackgroundTransparency = 0.58
+row.Size = UDim2.new(1, -4, 0, 36)
 row.BorderSizePixel = 0
 row.LayoutOrder = order
 row.ZIndex = 4
 row.Parent = parent
-corner(row, 14)
+corner(row, 18)
 stroke(row, Color3.fromRGB(200, 130, 220), 1.15, 0.25)
+-- Gradient pink overlay so row is never black
+do
+local rowGrad = Instance.new("UIGradient")
+rowGrad.Color = ColorSequence.new({
+ColorSequenceKeypoint.new(0, Color3.fromRGB(240, 100, 160)),
+ColorSequenceKeypoint.new(1, Color3.fromRGB(180, 80, 200)),
+})
+rowGrad.Rotation = 135
+rowGrad.Transparency = NumberSequence.new({
+NumberSequenceKeypoint.new(0, 0.62),
+NumberSequenceKeypoint.new(1, 0.62),
+})
+rowGrad.Parent = row
+end
 local label = Instance.new("TextLabel")
 label.Name = "Label"
 label.BackgroundTransparency = 1
@@ -3921,10 +3939,10 @@ label.Size = UDim2.new(1, -132, 1, 0)
 label.ZIndex = 5
 label.Parent = row
 row.MouseEnter:Connect(function()
-tween(row, {BackgroundTransparency = 0.55})
+tween(row, {BackgroundTransparency = 0.40})
 end)
 row.MouseLeave:Connect(function()
-tween(row, {BackgroundTransparency = 0.72})
+tween(row, {BackgroundTransparency = 0.58})
 end)
 return row
 end
@@ -4094,7 +4112,7 @@ Transparency = state and 0.08 or 0.38,
 Thickness = state and 1.3 or 1.15
 })
 end
-tween(row, {BackgroundTransparency = state and 0.45 or 0.72})
+tween(row, {BackgroundTransparency = state and 0.35 or 0.58})
 end
 setVisual(default)
 return row, setVisual, button
@@ -4368,7 +4386,7 @@ end
 function modeDisplayRow(parent, order, side)
 local row = baseRow(parent, "Mode", order)
 row.Size = UDim2.new(1, -4, 0, 42)
-row.BackgroundTransparency = 0.42
+row.BackgroundTransparency = 0.48
 local label = row:FindFirstChild("Label")
 if label then
 label.Text = "Mode"
@@ -4431,15 +4449,15 @@ end
 _G.AceAimbotSelectorRow = function(parent, order)
 local holder = Instance.new("Frame")
 holder.Name = "Aimbot Mode"
-holder.BackgroundColor3 = COLORS.row
-holder.BackgroundTransparency = 0.28
+holder.BackgroundColor3 = Color3.fromRGB(220, 80, 140)
+holder.BackgroundTransparency = 0.48
 holder.Size = UDim2.new(1, -4, 0, 42)
 holder.BorderSizePixel = 0
 holder.LayoutOrder = order
 holder.ZIndex = 4
 holder.ClipsDescendants = true
 holder.Parent = parent
-corner(holder, 14)
+corner(holder, 18)
 stroke(holder, COLORS.strokeSoft, 1.15, 0.38)
 local slide = Instance.new("Frame")
 slide.Name = "SelectedSlide"
@@ -4552,15 +4570,15 @@ end
 function autoStealSelectorRow(parent, order)
 local holder = Instance.new("Frame")
 holder.Name = "Auto Steal Mode"
-holder.BackgroundColor3 = COLORS.row
-holder.BackgroundTransparency = 0.28
+holder.BackgroundColor3 = Color3.fromRGB(220, 80, 140)
+holder.BackgroundTransparency = 0.48
 holder.Size = UDim2.new(1, -4, 0, 42)
 holder.BorderSizePixel = 0
 holder.LayoutOrder = order
 holder.ZIndex = 4
 holder.ClipsDescendants = true
 holder.Parent = parent
-corner(holder, 14)
+corner(holder, 18)
 stroke(holder, COLORS.strokeSoft, 1.15, 0.38)
 local slide = Instance.new("Frame")
 slide.Name = "SelectedSlide"
@@ -4895,7 +4913,7 @@ end
 if _G.AceRefreshAimbotSpeedBoxes then _G.AceRefreshAimbotSpeedBoxes() else laggerAimbotSpeedBox.Text = tostring(LAGGER_AIMBOT_SPEED) end
 saveAceConfig()
 end)
-section(Combat, "ANTI DESYNC BAT", 10)
+section(Combat, "TP BAT", 10)
 _G.AceAntiDesyncAutoSwingRow, _G.AceAntiDesyncAutoSwingSetVisual, _G.AceAntiDesyncAutoSwingBtn = _G.AceActionToggleRow(Combat, "Auto Swing", antiDesyncAutoSwingEnabled, 11)
 do
 if _G.AceAntiDesyncAutoSwingBtn then
@@ -5968,14 +5986,14 @@ end
 function stepperRow(parent, labelText, defaultValue, order, callback, minValue, maxValue)
 local row = Instance.new("Frame")
 row.Name = labelText
-row.BackgroundColor3 = COLORS.row
-row.BackgroundTransparency = 0.72
+row.BackgroundColor3 = Color3.fromRGB(220, 80, 140)
+row.BackgroundTransparency = 0.58
 row.Size = UDim2.new(1, -4, 0, 42)
 row.BorderSizePixel = 0
 row.LayoutOrder = order
 row.ZIndex = 4
 row.Parent = parent
-corner(row, 14)
+corner(row, 18)
 stroke(row, COLORS.strokeSoft, 1.15, 0.32)
 local label = Instance.new("TextLabel")
 label.Name = "Label"
@@ -6714,7 +6732,57 @@ progressFill.ZIndex = 3
 Instance.new("UICorner", progressFill).CornerRadius = UDim.new(1, 0)
 local fillGradient = Instance.new("UIGradient", progressFill)
 fillGradient.Color = ColorSequence.new(THEME_ACCENT_BRIGHT, THEME_ACCENT_DIM)
-fillGradient.Rotation = 90
+fillGradient.Rotation = 0
+-- Function to update fill gradient color based on mode and progress
+local function updateFillGradientForProgress(pct)
+if selectedStealMode ~= "Semi" then
+-- Normal mode: keep default pink gradient
+fillGradient.Color = ColorSequence.new({
+ColorSequenceKeypoint.new(0, THEME_ACCENT_BRIGHT),
+ColorSequenceKeypoint.new(1, THEME_ACCENT_DIM),
+})
+else
+-- Semi mode: blue (start) → pink (middle) → purple (end) based on progress
+-- We show a left-to-right gradient that shifts as fill grows
+-- The gradient is always full width but the frame clips it
+local blueColor   = Color3.fromRGB(80, 160, 255)
+local pinkColor   = Color3.fromRGB(255, 120, 200)
+local purpleColor = Color3.fromRGB(180, 80, 255)
+if pct <= 0.01 then
+-- nearly empty: show blue
+fillGradient.Color = ColorSequence.new({
+ColorSequenceKeypoint.new(0, blueColor),
+ColorSequenceKeypoint.new(1, blueColor),
+})
+elseif pct < 0.5 then
+-- 0 → 0.5: blue to pink
+local t = pct / 0.5
+local midColor = Color3.new(
+blueColor.R + (pinkColor.R - blueColor.R) * t,
+blueColor.G + (pinkColor.G - blueColor.G) * t,
+blueColor.B + (pinkColor.B - blueColor.B) * t
+)
+fillGradient.Color = ColorSequence.new({
+ColorSequenceKeypoint.new(0, blueColor),
+ColorSequenceKeypoint.new(0.5, midColor),
+ColorSequenceKeypoint.new(1, pinkColor),
+})
+else
+-- 0.5 → 1: pink to purple
+local t = (pct - 0.5) / 0.5
+local endColor = Color3.new(
+pinkColor.R + (purpleColor.R - pinkColor.R) * t,
+pinkColor.G + (purpleColor.G - pinkColor.G) * t,
+pinkColor.B + (purpleColor.B - pinkColor.B) * t
+)
+fillGradient.Color = ColorSequence.new({
+ColorSequenceKeypoint.new(0, blueColor),
+ColorSequenceKeypoint.new(0.5, pinkColor),
+ColorSequenceKeypoint.new(1, endColor),
+})
+end
+end
+end
 local stealLbl = Instance.new("TextLabel", fillRegion)
 stealLbl.Size = UDim2.new(0, 50, 1, 0)
 stealLbl.Position = UDim2.new(0, 10, 0, 0)
@@ -6772,6 +6840,7 @@ function StealBar.SetProgress(p)
 p = math.clamp(p, 0, 1)
 progressFill.Size = UDim2.new(p, 0, 1, 0)
 progressPct.Text = math.floor(p * 100 + 0.5) .. "%"
+pcall(function() updateFillGradientForProgress(p) end)
 end
 function StealBar.Reset()
 StealBar.SetProgress(0)
@@ -7634,7 +7703,7 @@ if mobileButtons.autoLeft then mobileButtons.autoLeft.setActive(autoLeftEnabled 
 if mobileButtons.autoRight then mobileButtons.autoRight.setActive(autoRightEnabled == true) end
 end)
 end)
-makeButton("antiDesync", "ANTI\nDESYNC", defaults.antiDesync, function(btn)
+makeButton("antiDesync", "TP\nBAT", defaults.antiDesync, function(btn)
 if _G.AceSafeModeIsLocked and _G.AceSafeModeIsLocked() then
 if _G.AceSafeModeForceStop then _G.AceSafeModeForceStop("SAFE MODE LOCK") end
 return
