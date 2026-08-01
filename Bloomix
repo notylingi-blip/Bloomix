@@ -3323,10 +3323,6 @@ if newState == Enum.HumanoidStateType.Physics
 or newState == Enum.HumanoidStateType.Ragdoll
 or newState == Enum.HumanoidStateType.FallingDown then
 beginCountdown()
--- Wait Ragdoll To Steal: block steal for ragdoll duration
-if waitRagdollToSteal then
-waitRagdollToStealBlockedUntil = tick() + 2
-end
 end
 end)
 ragdollCountdownConn = RunService.RenderStepped:Connect(function()
@@ -3373,7 +3369,38 @@ LP.CharacterAdded:Connect(function(char)
 task.wait(0.5)
 setupOverheadInfo(char)
 if ragdollCountdownEnabled then hookRagdollCountdown(char) end
+-- Independent ragdoll hook for Wait Ragdoll To Steal
+local hum = char:FindFirstChildOfClass("Humanoid") or char:WaitForChild("Humanoid", 5)
+if hum then
+hum.StateChanged:Connect(function(_, newState)
+if waitRagdollToSteal then
+if newState == Enum.HumanoidStateType.Physics
+or newState == Enum.HumanoidStateType.Ragdoll
+or newState == Enum.HumanoidStateType.FallingDown then
+waitRagdollToStealBlockedUntil = tick() + 2
+end
+end
 end)
+end
+end)
+-- Also hook for current character on script load
+do
+local char = LP.Character
+if char then
+local hum = char:FindFirstChildOfClass("Humanoid")
+if hum then
+hum.StateChanged:Connect(function(_, newState)
+if waitRagdollToSteal then
+if newState == Enum.HumanoidStateType.Physics
+or newState == Enum.HumanoidStateType.Ragdoll
+or newState == Enum.HumanoidStateType.FallingDown then
+waitRagdollToStealBlockedUntil = tick() + 2
+end
+end
+end)
+end
+end
+end
 RunService.RenderStepped:Connect(function()
 local char = LP.Character
 if not char then return end
