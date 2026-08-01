@@ -107,6 +107,8 @@ local autoResetOnMedEnabled = false
 local espEnabled = false
 local showTracerEnabled = false
 local ragdollCountdownEnabled = false
+local waitRagdollToSteal = false
+local waitRagdollToStealBlockedUntil = 0
 local fpsBoostEnabled = false
 local antiLagVisualEnabled = false
 local nukeOptimiserEnabled = false
@@ -915,6 +917,7 @@ autoResetOnMedEnabled = autoResetOnMedEnabled,
 espEnabled = espEnabled,
 showTracerEnabled = showTracerEnabled,
 ragdollCountdownEnabled = ragdollCountdownEnabled,
+waitRagdollToSteal = waitRagdollToSteal,
 fpsBoostEnabled = fpsBoostEnabled,
 antiLagVisualEnabled = antiLagVisualEnabled,
 nukeOptimiserEnabled = nukeOptimiserEnabled,
@@ -1028,6 +1031,7 @@ antiKickEnabled = data.safeMode == true
 autoResetOnMedEnabled = data.autoResetOnMedEnabled == true
 espEnabled = false -- never restore ESP as enabled
 showTracerEnabled = false
+waitRagdollToSteal = data.waitRagdollToSteal == true
 ragdollCountdownEnabled = data.ragdollCountdownEnabled == true
 fpsBoostEnabled = data.fpsBoostEnabled == true
 antiLagVisualEnabled = data.antiLagVisualEnabled == true
@@ -2396,6 +2400,8 @@ a.stealConn = RunService.Heartbeat:Connect(function()
 if not a.enabled then return end
 if selectedStealMode ~= "Normal" then _G.AceNormalAutoStealStop(); return end
 if a.isStealing then return end
+-- Wait Ragdoll To Steal guard
+if waitRagdollToSteal and tick() < waitRagdollToStealBlockedUntil then return end
 local target = nearestAnimal()
 if not target then return end
 local prompt = findPrompt(target)
@@ -2717,6 +2723,8 @@ A.conn = RunService.Heartbeat:Connect(function()
 if not A.enabled then return end
 if selectedStealMode ~= "Semi" then _G.AceSemiAutoStealStop(); return end
 if A.state.active then return end
+-- Wait Ragdoll To Steal guard
+if waitRagdollToSteal and tick() < waitRagdollToStealBlockedUntil then return end
 local target = pickClosest()
 if not target then return end
 local prompt = findPromptForAnimal(target)
@@ -3315,11 +3323,29 @@ if newState == Enum.HumanoidStateType.Physics
 or newState == Enum.HumanoidStateType.Ragdoll
 or newState == Enum.HumanoidStateType.FallingDown then
 beginCountdown()
+-- Wait Ragdoll To Steal: block steal for ragdoll duration
+if waitRagdollToSteal then
+waitRagdollToStealBlockedUntil = tick() + RAGDOLL_COUNTDOWN_SECONDS
+end
 end
 end)
 ragdollCountdownConn = RunService.RenderStepped:Connect(function()
 if not ragdollCountdownEnabled then stopRagdollCountdown(); return end
 if not ragdollCountdownLabel or not ragdollCountdownLabel.Parent then return end
+-- Also catch RagdollEndTime-based ragdoll for WaitRagdollToSteal
+if waitRagdollToSteal then
+local endTime = LP:GetAttribute("RagdollEndTime")
+if endTime then
+local serverNow = workspace:GetServerTimeNow()
+local remaining = endTime - serverNow
+if remaining > 0 then
+local blocked = tick() + remaining
+if blocked > waitRagdollToStealBlockedUntil then
+waitRagdollToStealBlockedUntil = blocked
+end
+end
+end
+end
 if isRagdollStateForCountdown() and ragdollCountdownEndTime < tick() then
 beginCountdown()
 end
@@ -4830,6 +4856,20 @@ end
 end
 local stealDurRow
 stealDurRow, autoStealDurationBox = textboxRow(Combat, "Steal Duration (Normal)", string.format("%.1f", normalStealDuration), 3.5)
+do
+local wrtRow, setWrtVisual = toggleRow(Combat, "Wait Ragdoll To Steal", waitRagdollToSteal, 3.2)
+local wrtBtn = wrtRow and wrtRow:FindFirstChild("ToggleButton")
+if wrtBtn then
+wrtBtn.Activated:Connect(function()
+waitRagdollToSteal = not waitRagdollToSteal
+setWrtVisual(waitRagdollToSteal)
+if not waitRagdollToSteal then
+waitRagdollToStealBlockedUntil = 0
+end
+saveAceConfig()
+end)
+end
+end
 if stealDurRow then
 stealDurRow.Visible = (selectedStealMode == "Normal")
 end
