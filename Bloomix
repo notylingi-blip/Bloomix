@@ -1029,7 +1029,7 @@ batCounterEnabled = data.batCounterEnabled == true
 medCounterEnabled = data.medCounterEnabled == true
 antiKickEnabled = data.safeMode == true
 autoResetOnMedEnabled = data.autoResetOnMedEnabled == true
-espEnabled = false -- never restore ESP as enabled
+espEnabled = data.espEnabled == true
 showTracerEnabled = false
 waitRagdollToSteal = data.waitRagdollToSteal == true
 ragdollCountdownEnabled = data.ragdollCountdownEnabled == true
@@ -5896,8 +5896,7 @@ return row
 end
 section(Utility, "ESP", 1)
 do
-local espRow, setESPVisual = toggleRow(Utility, "ESP", false, 2)
-espEnabled = false  -- never auto-start, always off on load
+local espRow, setESPVisual = toggleRow(Utility, "ESP", espEnabled, 2)
 setPlayerESPVisual = setESPVisual
 _aceBtn = espRow and espRow:FindFirstChild("ToggleButton")
 if _aceBtn then
@@ -5913,6 +5912,14 @@ end
 if refreshBoxedESP then refreshBoxedESP() end
 if setESPVisual then setESPVisual(espEnabled) end
 saveAceConfig()
+end)
+end
+-- auto-start if was saved as enabled
+if espEnabled then
+task.defer(function()
+if startPlayerESP then startPlayerESP() end
+if BoxedESPOptions then BoxedESPOptions.box = true end
+if refreshBoxedESP then refreshBoxedESP() end
 end)
 end
 end
