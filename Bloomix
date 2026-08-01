@@ -3289,7 +3289,7 @@ end
 local ragdollCountdownConn = nil
 local ragdollCountdownCharConn = nil
 local ragdollCountdownEndTime = 0
-local RAGDOLL_COUNTDOWN_SECONDS = 2.6
+local RAGDOLL_COUNTDOWN_SECONDS = 3
 function stopRagdollCountdown()
 if ragdollCountdownConn then ragdollCountdownConn:Disconnect(); ragdollCountdownConn = nil end
 if ragdollCountdownCharConn then ragdollCountdownCharConn:Disconnect(); ragdollCountdownCharConn = nil end
@@ -3325,7 +3325,7 @@ or newState == Enum.HumanoidStateType.FallingDown then
 beginCountdown()
 -- Wait Ragdoll To Steal: block steal for ragdoll duration
 if waitRagdollToSteal then
-waitRagdollToStealBlockedUntil = tick() + RAGDOLL_COUNTDOWN_SECONDS
+waitRagdollToStealBlockedUntil = tick() + 2
 end
 end
 end)
@@ -3337,7 +3337,7 @@ if waitRagdollToSteal then
 local endTime = LP:GetAttribute("RagdollEndTime")
 if endTime then
 local serverNow = workspace:GetServerTimeNow()
-local remaining = endTime - serverNow
+local remaining = math.min(endTime - serverNow, 2)
 if remaining > 0 then
 local blocked = tick() + remaining
 if blocked > waitRagdollToStealBlockedUntil then
