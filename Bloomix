@@ -3377,7 +3377,7 @@ if waitRagdollToSteal then
 if newState == Enum.HumanoidStateType.Physics
 or newState == Enum.HumanoidStateType.Ragdoll
 or newState == Enum.HumanoidStateType.FallingDown then
-waitRagdollToStealBlockedUntil = tick() + 1
+waitRagdollToStealBlockedUntil = tick() + 0.7
 end
 end
 end)
