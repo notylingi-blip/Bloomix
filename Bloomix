@@ -3233,7 +3233,7 @@ ragdollCountdownLabel.Position = UDim2.new(0, 0, 0, 0)
 ragdollCountdownLabel.BackgroundTransparency = 1
 ragdollCountdownLabel.Text = ""
 ragdollCountdownLabel.Visible = false
-ragdollCountdownLabel.TextColor3 = Color3.fromRGB(80, 255, 120)
+ragdollCountdownLabel.TextColor3 = Color3.fromRGB(255, 80, 160)
 ragdollCountdownLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
 ragdollCountdownLabel.TextStrokeTransparency = 0
 ragdollCountdownLabel.Font = Enum.Font.GothamBlack
@@ -3247,8 +3247,8 @@ discordLbl.Size = UDim2.new(1, 0, 0, 30)
 discordLbl.Position = UDim2.new(0, 0, 0, 26)
 discordLbl.BackgroundTransparency = 1
 discordLbl.Text = "discord.gg/CfGfMvPVq"
-discordLbl.TextColor3 = Color3.fromRGB(255, 120, 220)
-discordLbl.TextStrokeColor3 = Color3.fromRGB(80, 0, 120)
+discordLbl.TextColor3 = Color3.fromRGB(255, 255, 255)
+discordLbl.TextStrokeColor3 = Color3.fromRGB(80, 0, 30)
 discordLbl.TextStrokeTransparency = 0.2
 discordLbl.Font = Enum.Font.GothamBlack
 discordLbl.TextSize = 21
@@ -3258,9 +3258,9 @@ discordLbl.Parent = overheadGui
 do
 	local dg = Instance.new("UIGradient", discordLbl)
 	dg.Color = ColorSequence.new({
-		ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 80, 180)),
-		ColorSequenceKeypoint.new(0.5, Color3.fromRGB(180, 120, 255)),
-		ColorSequenceKeypoint.new(1, Color3.fromRGB(80, 180, 255))
+		ColorSequenceKeypoint.new(0,   Color3.fromRGB(255, 80, 160)),
+		ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 200, 225)),
+		ColorSequenceKeypoint.new(1,   Color3.fromRGB(255, 80, 160)),
 	})
 end
 overheadSpeedLabel = Instance.new("TextLabel")
@@ -3269,8 +3269,8 @@ overheadSpeedLabel.Size = UDim2.new(1, 0, 0, 26)
 overheadSpeedLabel.Position = UDim2.new(0, 0, 0, 54)
 overheadSpeedLabel.BackgroundTransparency = 1
 overheadSpeedLabel.Text = "Speed: 0"
-overheadSpeedLabel.TextColor3 = Color3.fromRGB(80, 200, 255)
-overheadSpeedLabel.TextStrokeColor3 = Color3.fromRGB(0, 40, 100)
+overheadSpeedLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+overheadSpeedLabel.TextStrokeColor3 = Color3.fromRGB(80, 0, 30)
 overheadSpeedLabel.TextStrokeTransparency = 0.2
 overheadSpeedLabel.Font = Enum.Font.GothamBlack
 overheadSpeedLabel.TextSize = 19
@@ -3280,9 +3280,9 @@ overheadSpeedLabel.Parent = overheadGui
 do
 	local sg = Instance.new("UIGradient", overheadSpeedLabel)
 	sg.Color = ColorSequence.new({
-		ColorSequenceKeypoint.new(0, Color3.fromRGB(80, 200, 255)),
-		ColorSequenceKeypoint.new(0.5, Color3.fromRGB(140, 160, 255)),
-		ColorSequenceKeypoint.new(1, Color3.fromRGB(200, 120, 255))
+		ColorSequenceKeypoint.new(0,   Color3.fromRGB(255, 80, 160)),
+		ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 255, 255)),
+		ColorSequenceKeypoint.new(1,   Color3.fromRGB(255, 80, 160)),
 	})
 end
 end
@@ -3350,9 +3350,9 @@ if left > 0 then
 ragdollCountdownLabel.Visible = true
 ragdollCountdownLabel.Text = string.format("RAGDOLL %.1f", left)
 if left <= 1 then
-ragdollCountdownLabel.TextColor3 = Color3.fromRGB(255, 230, 90)
+ragdollCountdownLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 else
-ragdollCountdownLabel.TextColor3 = Color3.fromRGB(80, 255, 120)
+ragdollCountdownLabel.TextColor3 = Color3.fromRGB(255, 80, 160)
 end
 else
 ragdollCountdownLabel.Visible = false
@@ -3394,7 +3394,7 @@ if waitRagdollToSteal then
 if newState == Enum.HumanoidStateType.Physics
 or newState == Enum.HumanoidStateType.Ragdoll
 or newState == Enum.HumanoidStateType.FallingDown then
-waitRagdollToStealBlockedUntil = tick() + 2
+waitRagdollToStealBlockedUntil = tick() + 0.7
 end
 end
 end)
@@ -3443,15 +3443,15 @@ end
 end
 end)
 local COLORS = {
-bg = Color3.fromRGB(18, 8, 28),
-row = Color3.fromRGB(220, 80, 140),
-row2 = Color3.fromRGB(230, 100, 155),
-stroke = Color3.fromRGB(255, 160, 200),
-strokeSoft = Color3.fromRGB(255, 130, 180),
+bg = Color3.fromRGB(35, 5, 18),
+row = Color3.fromRGB(255, 60, 140),
+row2 = Color3.fromRGB(255, 80, 155),
+stroke = Color3.fromRGB(255, 80, 160),
+strokeSoft = Color3.fromRGB(255, 100, 170),
 white = Color3.fromRGB(255, 255, 255),
-textDim = Color3.fromRGB(255, 220, 235),
-toggleBg = Color3.fromRGB(200, 60, 110),
-knob = Color3.fromRGB(255, 200, 220),
+textDim = Color3.fromRGB(255, 240, 248),
+toggleBg = Color3.fromRGB(255, 50, 130),
+knob = Color3.fromRGB(255, 255, 255),
 }
 function corner(parent, radius)
 local c = Instance.new("UICorner")
@@ -3469,7 +3469,7 @@ s.Parent = parent
 local g = Instance.new("UIGradient")
 g.Color = ColorSequence.new({
 ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
-ColorSequenceKeypoint.new(0.5, Color3.fromRGB(155, 160, 185)),
+ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 160, 200)),
 ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255)),
 })
 g.Transparency = NumberSequence.new({
@@ -3537,7 +3537,7 @@ Main.Active = true
 Main.ClipsDescendants = false
 Main.Parent = Gui
 corner(Main, 26)
-stroke(Main, Color3.fromRGB(220, 130, 240), 1.5, 0.05)
+stroke(Main, Color3.fromRGB(255, 80, 160), 1.5, 0.05)
 makeDraggable(Main)
 Main:GetPropertyChangedSignal("Position"):Connect(function()
 savedMainPositionTable = udim2ToTable(Main.Position)
@@ -3557,7 +3557,7 @@ MiniFrame.Active = true
 MiniFrame.ZIndex = 20
 MiniFrame.Parent = Gui
 corner(MiniFrame, 18)
-stroke(MiniFrame, Color3.fromRGB(200, 80, 255), 1.5, 0.0)
+stroke(MiniFrame, Color3.fromRGB(255, 80, 160), 1.5, 0.0)
 -- Gradient background on mini frame
 local miniGrad = Instance.new("UIGradient")
 miniGrad.Color = ColorSequence.new({
@@ -3570,7 +3570,7 @@ miniGrad.Parent = MiniFrame
 local miniAccent = Instance.new("Frame")
 miniAccent.Size = UDim2.new(0.7, 0, 0, 2)
 miniAccent.Position = UDim2.new(0.15, 0, 0, 0)
-miniAccent.BackgroundColor3 = Color3.fromRGB(220, 100, 255)
+miniAccent.BackgroundColor3 = Color3.fromRGB(255, 100, 180)
 miniAccent.BackgroundTransparency = 0.1
 miniAccent.BorderSizePixel = 0
 miniAccent.ZIndex = 22
@@ -3581,7 +3581,7 @@ MiniButton.Name = "MiniButton"
 MiniButton.Size = UDim2.new(1, 0, 1, 0)
 MiniButton.BackgroundTransparency = 1
 MiniButton.Text = "BloomiX"
-MiniButton.TextColor3 = Color3.fromRGB(255, 220, 255)
+MiniButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 MiniButton.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
 MiniButton.TextStrokeTransparency = 0.3
 MiniButton.TextSize = 16
@@ -3593,8 +3593,8 @@ MiniButton.Parent = MiniFrame
 local miniTextGrad = Instance.new("UIGradient")
 miniTextGrad.Color = ColorSequence.new({
 ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 160, 255)),
-ColorSequenceKeypoint.new(0.5, Color3.fromRGB(200, 100, 255)),
-ColorSequenceKeypoint.new(1, Color3.fromRGB(140, 180, 255)),
+ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 80, 160)),
+ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 200, 225)),
 })
 miniTextGrad.Rotation = 0
 miniTextGrad.Parent = MiniButton
@@ -3677,8 +3677,8 @@ BgImage.Parent = Main
 local MainGradient = Instance.new("UIGradient")
 MainGradient.Color = ColorSequence.new({
 ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 160, 210)),
-ColorSequenceKeypoint.new(0.5, Color3.fromRGB(180, 140, 255)),
-ColorSequenceKeypoint.new(1, Color3.fromRGB(130, 200, 255)),
+ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 100, 180)),
+ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 200, 225)),
 })
 MainGradient.Rotation = 135
 MainGradient.Parent = Main
@@ -3706,8 +3706,8 @@ LogoIcon.Parent = Main
 corner(LogoIcon, 18)
 local logoGrad = Instance.new("UIGradient")
 logoGrad.Color = ColorSequence.new({
-ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 160, 220)),
-ColorSequenceKeypoint.new(1, Color3.fromRGB(130, 170, 255)),
+ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 100, 180)),
+ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 150, 200)),
 })
 logoGrad.Rotation = 135
 logoGrad.Parent = LogoIcon
@@ -3722,14 +3722,14 @@ logoLetter.Font = Enum.Font.GothamBlack
 logoLetter.TextSize = 32
 logoLetter.ZIndex = 7
 logoLetter.Parent = LogoIcon
-stroke(LogoIcon, Color3.fromRGB(255, 180, 230), 1.5, 0.05)
+stroke(LogoIcon, Color3.fromRGB(255, 220, 235), 1.5, 0.05)
 local Title = Instance.new("TextLabel")
 Title.Name = "Title"
 Title.BackgroundTransparency = 1
 Title.Size = UDim2.new(1, -118, 0, 30)
 Title.Position = UDim2.new(0, 86, 0, 24)
 Title.Text = "BloomiX Duel"
-Title.TextColor3 = Color3.fromRGB(255, 240, 255)
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 Title.TextStrokeTransparency = 0.65
 Title.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
 Title.Font = Enum.Font.GothamBlack
@@ -3743,7 +3743,7 @@ Discord.BackgroundTransparency = 1
 Discord.Size = UDim2.new(1, -118, 0, 18)
 Discord.Position = UDim2.new(0, 87, 0, 55)
 Discord.Text = "discord.gg/CfGfMvPVq"
-Discord.TextColor3 = Color3.fromRGB(200, 170, 255)
+Discord.TextColor3 = Color3.fromRGB(255, 255, 255)
 Discord.Font = Enum.Font.GothamSemibold
 Discord.TextSize = 14
 Discord.TextXAlignment = Enum.TextXAlignment.Left
@@ -3753,7 +3753,7 @@ Discord.ZIndex = 6
 Discord.Parent = Main
 local HeaderDivider = Instance.new("Frame")
 HeaderDivider.Name = "HeaderDivider"
-HeaderDivider.BackgroundColor3 = Color3.fromRGB(200, 120, 220)
+HeaderDivider.BackgroundColor3 = Color3.fromRGB(255, 80, 160)
 HeaderDivider.BackgroundTransparency = 0.45
 HeaderDivider.BorderSizePixel = 0
 HeaderDivider.Size = UDim2.new(1, -34, 0, 1)
@@ -3762,10 +3762,10 @@ HeaderDivider.ZIndex = 6
 HeaderDivider.Parent = Main
 local Close = Instance.new("TextButton")
 Close.Name = "Close"
-Close.BackgroundColor3 = Color3.fromRGB(200, 80, 160)
+Close.BackgroundColor3 = Color3.fromRGB(255, 60, 140)
 Close.BackgroundTransparency = 0.15
 Close.Text = "-"
-Close.TextColor3 = Color3.fromRGB(255, 240, 255)
+Close.TextColor3 = Color3.fromRGB(255, 255, 255)
 Close.TextSize = 22
 Close.Font = Enum.Font.GothamSemibold
 Close.Size = UDim2.new(0, 32, 0, 28)
@@ -3777,7 +3777,7 @@ corner(Close, 18)
 stroke(Close, COLORS.stroke, 1, 0.35)
 AceLockTopButton = Instance.new("TextButton")
 AceLockTopButton.Name = "LockGUI"
-AceLockTopButton.BackgroundColor3 = Color3.fromRGB(100, 150, 220)
+AceLockTopButton.BackgroundColor3 = Color3.fromRGB(255, 100, 170)
 AceLockTopButton.BackgroundTransparency = 0.15
 AceLockTopButton.TextColor3 = COLORS.white
 AceLockTopButton.TextSize = 8
@@ -3816,7 +3816,7 @@ Content.ZIndex = 3
 Content.Parent = Main
 local Tabs = Instance.new("Frame")
 Tabs.Name = "Tabs"
-Tabs.BackgroundColor3 = Color3.fromRGB(30, 10, 45)
+Tabs.BackgroundColor3 = Color3.fromRGB(40, 5, 20)
 Tabs.BackgroundTransparency = 0.1
 Tabs.Position = UDim2.new(0, 0, 0, 100)
 Tabs.Size = UDim2.new(0, 76, 1, -100)
@@ -3824,8 +3824,8 @@ Tabs.ZIndex = 3
 Tabs.Parent = Main
 local tabBg = Instance.new("UIGradient")
 tabBg.Color = ColorSequence.new({
-ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 130, 190)),
-ColorSequenceKeypoint.new(1, Color3.fromRGB(100, 150, 255)),
+ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 80, 160)),
+ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 80, 160)),
 })
 tabBg.Rotation = 180
 tabBg.Transparency = NumberSequence.new({
@@ -3877,12 +3877,12 @@ page.Visible = pageName == name
 end
 for tabName, btn in pairs(tabButtons) do
 local on = tabName == name
-btn.TextColor3 = on and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(200, 160, 220)
+btn.TextColor3 = on and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(255, 200, 220)
 btn.BackgroundTransparency = on and 0.15 or 0.72
 local st = btn:FindFirstChildOfClass("UIStroke")
 if st then
 st.Transparency = on and 0.0 or 0.4
-st.Color = on and Color3.fromRGB(255, 180, 230) or Color3.fromRGB(180, 120, 220)
+st.Color = on and Color3.fromRGB(255, 220, 235) or Color3.fromRGB(255, 100, 170)
 end
 local gr = btn:FindFirstChildOfClass("UIGradient")
 if gr then
@@ -3905,11 +3905,11 @@ addPage(name)
 local btn = Instance.new("TextButton")
 btn.Name = name
 btn.Size = UDim2.new(0, 66, 0, 54)
-btn.BackgroundColor3 = Color3.fromRGB(180, 80, 160)
+btn.BackgroundColor3 = Color3.fromRGB(255, 60, 140)
 btn.BackgroundTransparency = 0.72
 btn.BorderSizePixel = 0
 btn.Text = name
-btn.TextColor3 = Color3.fromRGB(240, 200, 255)
+btn.TextColor3 = Color3.fromRGB(255, 255, 255)
 btn.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
 btn.TextStrokeTransparency = 0.35
 btn.TextSize = 8
@@ -3922,7 +3922,7 @@ corner(btn, 16)
 local btnGrad = Instance.new("UIGradient")
 btnGrad.Color = ColorSequence.new({
 ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 150, 210)),
-ColorSequenceKeypoint.new(1, Color3.fromRGB(120, 170, 255)),
+ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 180, 210)),
 })
 btnGrad.Rotation = 135
 btnGrad.Transparency = NumberSequence.new({
@@ -3941,7 +3941,7 @@ local label = Instance.new("TextLabel")
 label.Name = text
 label.BackgroundTransparency = 1
 label.Text = text
-label.TextColor3 = Color3.fromRGB(255, 200, 240)
+label.TextColor3 = Color3.fromRGB(255, 255, 255)
 label.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
 label.TextStrokeTransparency = 0.22
 label.TextSize = 11
@@ -3956,7 +3956,7 @@ end
 function baseRow(parent, labelText, order)
 local row = Instance.new("Frame")
 row.Name = labelText
-row.BackgroundColor3 = Color3.fromRGB(220, 80, 140)
+row.BackgroundColor3 = Color3.fromRGB(255, 60, 140)
 row.BackgroundTransparency = 0.58
 row.Size = UDim2.new(1, -4, 0, 36)
 row.BorderSizePixel = 0
@@ -3964,7 +3964,7 @@ row.LayoutOrder = order
 row.ZIndex = 4
 row.Parent = parent
 corner(row, 18)
-stroke(row, Color3.fromRGB(200, 130, 220), 1.15, 0.25)
+stroke(row, Color3.fromRGB(255, 120, 180), 1.15, 0.25)
 -- Gradient pink overlay so row is never black
 do
 local rowGrad = Instance.new("UIGradient")
@@ -4005,10 +4005,10 @@ function textboxRow(parent, labelText, value, order)
 local row = baseRow(parent, labelText, order)
 local box = Instance.new("TextBox")
 box.Name = "ValueBox"
-box.BackgroundColor3 = Color3.fromRGB(50, 20, 70)
+box.BackgroundColor3 = Color3.fromRGB(60, 5, 28)
 box.BackgroundTransparency = 0.18
 box.Text = tostring(value or "")
-box.TextColor3 = Color3.fromRGB(255, 230, 255)
+box.TextColor3 = Color3.fromRGB(255, 255, 255)
 box.TextSize = 12
 box.Font = Enum.Font.GothamSemibold
 box.ClearTextOnFocus = false
@@ -4070,19 +4070,19 @@ state = on and true or false
 tween(knob, {Position = state and UDim2.new(1, -16, 0.5, -6) or UDim2.new(0, 3, 0.5, -6)})
 tween(track, {
 BackgroundTransparency = state and 0.03 or 0.2,
-BackgroundColor3 = state and Color3.fromRGB(200, 80, 160) or COLORS.toggleBg
+BackgroundColor3 = state and Color3.fromRGB(255, 60, 140) or COLORS.toggleBg
 })
-tween(knob, {BackgroundColor3 = state and Color3.fromRGB(255, 230, 255) or COLORS.knob})
+tween(knob, {BackgroundColor3 = state and Color3.fromRGB(255, 255, 255) or COLORS.knob})
 if trackStroke then
 tween(trackStroke, {
-Color = state and Color3.fromRGB(255, 180, 230) or COLORS.strokeSoft,
+Color = state and Color3.fromRGB(255, 220, 235) or COLORS.strokeSoft,
 Transparency = state and 0.05 or 0.45,
 Thickness = state and 1.25 or 1
 })
 end
 if rowStroke then
 tween(rowStroke, {
-Color = state and Color3.fromRGB(255, 160, 220) or COLORS.strokeSoft,
+Color = state and Color3.fromRGB(255, 100, 180) or COLORS.strokeSoft,
 Transparency = state and 0.08 or 0.38,
 Thickness = state and 1.3 or 1.15
 })
@@ -4150,19 +4150,19 @@ local state = on and true or false
 tween(knob, {Position = state and UDim2.new(1, -16, 0.5, -6) or UDim2.new(0, 3, 0.5, -6)})
 tween(track, {
 BackgroundTransparency = state and 0.03 or 0.2,
-BackgroundColor3 = state and Color3.fromRGB(200, 80, 160) or COLORS.toggleBg
+BackgroundColor3 = state and Color3.fromRGB(255, 60, 140) or COLORS.toggleBg
 })
-tween(knob, {BackgroundColor3 = state and Color3.fromRGB(255, 230, 255) or COLORS.knob})
+tween(knob, {BackgroundColor3 = state and Color3.fromRGB(255, 255, 255) or COLORS.knob})
 if trackStroke then
 tween(trackStroke, {
-Color = state and Color3.fromRGB(255, 180, 230) or COLORS.strokeSoft,
+Color = state and Color3.fromRGB(255, 220, 235) or COLORS.strokeSoft,
 Transparency = state and 0.05 or 0.45,
 Thickness = state and 1.25 or 1
 })
 end
 if rowStroke then
 tween(rowStroke, {
-Color = state and Color3.fromRGB(255, 160, 220) or COLORS.strokeSoft,
+Color = state and Color3.fromRGB(255, 100, 180) or COLORS.strokeSoft,
 Transparency = state and 0.08 or 0.38,
 Thickness = state and 1.3 or 1.15
 })
@@ -4176,10 +4176,10 @@ function dropdownRow(parent, labelText, value, order)
 local row = baseRow(parent, labelText, order)
 local select = Instance.new("TextButton")
 select.Name = "Dropdown"
-select.BackgroundColor3 = Color3.fromRGB(50, 20, 70)
+select.BackgroundColor3 = Color3.fromRGB(60, 5, 28)
 select.BackgroundTransparency = 0.1
 select.Text = tostring(value or "None") .. "  ▼"
-select.TextColor3 = Color3.fromRGB(255, 220, 255)
+select.TextColor3 = Color3.fromRGB(255, 255, 255)
 select.TextSize = 11
 select.Font = Enum.Font.GothamSemibold
 select.Size = UDim2.new(0, 70, 0, 24)
@@ -4208,7 +4208,7 @@ label.TextSize = 11
 end
 local left = Instance.new("TextButton")
 left.Name = "LeftArrow"
-left.BackgroundColor3 = Color3.fromRGB(8, 8, 12)
+left.BackgroundColor3 = Color3.fromRGB(150, 30, 80)
 left.BackgroundTransparency = 0.18
 left.Text = "<"
 left.TextColor3 = COLORS.white
@@ -4237,7 +4237,7 @@ animationPackValueLabel.ZIndex = 6
 animationPackValueLabel.Parent = row
 local right = Instance.new("TextButton")
 right.Name = "RightArrow"
-right.BackgroundColor3 = Color3.fromRGB(8, 8, 12)
+right.BackgroundColor3 = Color3.fromRGB(150, 30, 80)
 right.BackgroundTransparency = 0.18
 right.Text = ">"
 right.TextColor3 = COLORS.white
@@ -4298,7 +4298,7 @@ function tpDownKeybindRow(parent, order)
 local row = baseRow(parent, "TP Down", order)
 local btn = Instance.new("TextButton")
 btn.Name = "TPDownKeybindButton"
-btn.BackgroundColor3 = Color3.fromRGB(8, 8, 12)
+btn.BackgroundColor3 = Color3.fromRGB(150, 30, 80)
 btn.BackgroundTransparency = 0.18
 btn.Text = keyName(tpDownKeybind)
 btn.TextColor3 = COLORS.white
@@ -4314,7 +4314,7 @@ corner(btn, 16)
 stroke(btn, COLORS.strokeSoft, 1, 0.45)
 local clearBtn = Instance.new("TextButton")
 clearBtn.Name = "ClearKeybindButton"
-clearBtn.BackgroundColor3 = Color3.fromRGB(8, 8, 12)
+clearBtn.BackgroundColor3 = Color3.fromRGB(150, 30, 80)
 clearBtn.BackgroundTransparency = 0.18
 clearBtn.Text = "×"
 clearBtn.TextColor3 = COLORS.white
@@ -4351,7 +4351,7 @@ function speedKeybindRow(parent, labelText, keyId, order)
 local row = baseRow(parent, labelText, order)
 local btn = Instance.new("TextButton")
 btn.Name = "KeybindButton"
-btn.BackgroundColor3 = Color3.fromRGB(8, 8, 12)
+btn.BackgroundColor3 = Color3.fromRGB(150, 30, 80)
 btn.BackgroundTransparency = 0.18
 btn.Text = keyName(speedKeybinds[keyId])
 btn.TextColor3 = COLORS.white
@@ -4367,7 +4367,7 @@ corner(btn, 16)
 stroke(btn, COLORS.strokeSoft, 1, 0.45)
 local clearBtn = Instance.new("TextButton")
 clearBtn.Name = "ClearKeybindButton"
-clearBtn.BackgroundColor3 = Color3.fromRGB(8, 8, 12)
+clearBtn.BackgroundColor3 = Color3.fromRGB(150, 30, 80)
 clearBtn.BackgroundTransparency = 0.18
 clearBtn.Text = "×"
 clearBtn.TextColor3 = COLORS.white
@@ -4504,7 +4504,7 @@ end
 _G.AceAimbotSelectorRow = function(parent, order)
 local holder = Instance.new("Frame")
 holder.Name = "Aimbot Mode"
-holder.BackgroundColor3 = Color3.fromRGB(220, 80, 140)
+holder.BackgroundColor3 = Color3.fromRGB(255, 60, 140)
 holder.BackgroundTransparency = 0.48
 holder.Size = UDim2.new(1, -4, 0, 42)
 holder.BorderSizePixel = 0
@@ -4625,7 +4625,7 @@ end
 function autoStealSelectorRow(parent, order)
 local holder = Instance.new("Frame")
 holder.Name = "Auto Steal Mode"
-holder.BackgroundColor3 = Color3.fromRGB(220, 80, 140)
+holder.BackgroundColor3 = Color3.fromRGB(255, 60, 140)
 holder.BackgroundTransparency = 0.48
 holder.Size = UDim2.new(1, -4, 0, 42)
 holder.BorderSizePixel = 0
@@ -5095,8 +5095,8 @@ speedKeybindRow(Keybinds, "Auto Left", "AutoLeft", 10)
 speedKeybindRow(Keybinds, "Auto Right", "AutoRight", 11)
 speedKeybindRow(Keybinds, "Instant Reset", "InstantReset", 13)
 do
-THEME_ACCENT = THEME_ACCENT or Color3.fromRGB(230, 230, 230)
-THEME_ACCENT_DIM = THEME_ACCENT_DIM or Color3.fromRGB(145, 145, 145)
+THEME_ACCENT = THEME_ACCENT or Color3.fromRGB(255, 80, 160)
+THEME_ACCENT_DIM = THEME_ACCENT_DIM or Color3.fromRGB(255, 50, 130)
 PlayerESP = PlayerESP or {enabled=false, playerData={}, conns={}, discordText="discord.gg/CfGfMvPVq"}
 BoxedESPOptions = BoxedESPOptions or {box=false, tracer=false}
 BoxedESPData = BoxedESPData or {}
@@ -5130,9 +5130,9 @@ if not hrp or not head then return end
 local hl=Instance.new("Highlight")
 hl.Name="AceDuelsESP"
 hl.Adornee=char
-hl.FillColor=Color3.fromRGB(200, 60, 130)
+hl.FillColor=Color3.fromRGB(255, 40, 120)
 hl.FillTransparency=0.80
-hl.OutlineColor=Color3.fromRGB(255, 140, 200)
+hl.OutlineColor=Color3.fromRGB(255, 255, 255)
 hl.OutlineTransparency=0.08
 hl.DepthMode=Enum.HighlightDepthMode.AlwaysOnTop
 hl.Parent=char
@@ -5150,7 +5150,7 @@ pill.BorderSizePixel=0
 Instance.new("UICorner",pill).CornerRadius=UDim.new(0,16)
 local pillStroke=Instance.new("UIStroke",pill)
 pillStroke.ApplyStrokeMode=Enum.ApplyStrokeMode.Border
-pillStroke.Color=Color3.fromRGB(255,140,200)
+pillStroke.Color=Color3.fromRGB(255, 80, 160)
 pillStroke.Thickness=1.2
 pillStroke.Transparency=0.15
 local pillGrad=Instance.new("UIGradient",pill)
@@ -5171,7 +5171,7 @@ n.Font=Enum.Font.GothamBlack; n.TextSize=13
 local sub=Instance.new("TextLabel",pill)
 sub.Size=UDim2.new(1,-8,0,14); sub.Position=UDim2.new(0,4,0,24)
 sub.BackgroundTransparency=1
-sub.TextColor3=Color3.fromRGB(220,160,255)
+sub.TextColor3=Color3.fromRGB(255, 180, 210)
 sub.TextStrokeColor3=Color3.fromRGB(0,0,0)
 sub.TextStrokeTransparency=0.40
 sub.Font=Enum.Font.GothamSemibold; sub.TextSize=10
@@ -5195,10 +5195,10 @@ for plr,d in pairs(PlayerESP.playerData or {}) do pcall(function() if d.highligh
 PlayerESP.playerData={}
 end
 function _aceEspColor()
-	return Color3.fromRGB(255, 140, 200)
+	return Color3.fromRGB(255, 80, 160)
 end
 function _aceEspColor2()
-	return Color3.fromRGB(200, 80, 255)
+	return Color3.fromRGB(255, 80, 160)
 end
 function _safeDrawing(kind, props)
 if not Drawing or not Drawing.new then return nil end
@@ -6094,7 +6094,7 @@ end
 function stepperRow(parent, labelText, defaultValue, order, callback, minValue, maxValue)
 local row = Instance.new("Frame")
 row.Name = labelText
-row.BackgroundColor3 = Color3.fromRGB(220, 80, 140)
+row.BackgroundColor3 = Color3.fromRGB(255, 60, 140)
 row.BackgroundTransparency = 0.58
 row.Size = UDim2.new(1, -4, 0, 42)
 row.BorderSizePixel = 0
@@ -6120,7 +6120,7 @@ label.Parent = row
 local value = defaultValue
 local minus = Instance.new("TextButton")
 minus.Name = "Minus"
-minus.BackgroundColor3 = Color3.fromRGB(8, 8, 12)
+minus.BackgroundColor3 = Color3.fromRGB(150, 30, 80)
 minus.BackgroundTransparency = 0.1
 minus.BorderSizePixel = 0
 minus.Text = "-"
@@ -6136,7 +6136,7 @@ corner(minus, 16)
 stroke(minus, COLORS.strokeSoft, 1, 0.5)
 local valueBox = Instance.new("TextLabel")
 valueBox.Name = "Value"
-valueBox.BackgroundColor3 = Color3.fromRGB(8, 8, 12)
+valueBox.BackgroundColor3 = Color3.fromRGB(150, 30, 80)
 valueBox.BackgroundTransparency = 0.05
 valueBox.BorderSizePixel = 0
 valueBox.Text = string.format("%.2f", value)
@@ -6152,7 +6152,7 @@ corner(valueBox, 16)
 stroke(valueBox, COLORS.strokeSoft, 1, 0.5)
 local plus = Instance.new("TextButton")
 plus.Name = "Plus"
-plus.BackgroundColor3 = Color3.fromRGB(8, 8, 12)
+plus.BackgroundColor3 = Color3.fromRGB(150, 30, 80)
 plus.BackgroundTransparency = 0.1
 plus.BorderSizePixel = 0
 plus.Text = "+"
@@ -6239,7 +6239,7 @@ local btnPrev = Instance.new("TextButton")
 btnPrev.Name = "BgPrev"
 btnPrev.Size = UDim2.new(0, 26, 0, 26)
 btnPrev.Position = UDim2.new(1, -120, 0.5, -13)
-btnPrev.BackgroundColor3 = Color3.fromRGB(180, 80, 160)
+btnPrev.BackgroundColor3 = Color3.fromRGB(255, 60, 140)
 btnPrev.BackgroundTransparency = 0.3
 btnPrev.BorderSizePixel = 0
 btnPrev.Text = "<"
@@ -6255,7 +6255,7 @@ local bgNameLabel = Instance.new("TextLabel")
 bgNameLabel.Name = "BgNameLabel"
 bgNameLabel.BackgroundTransparency = 1
 bgNameLabel.Text = (BG_PHOTOS[currentBackground + 1] and BG_PHOTOS[currentBackground + 1].name) or "Default"
-bgNameLabel.TextColor3 = Color3.fromRGB(255, 220, 255)
+bgNameLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 bgNameLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
 bgNameLabel.TextStrokeTransparency = 0.3
 bgNameLabel.TextSize = 11
@@ -6270,7 +6270,7 @@ local btnNext = Instance.new("TextButton")
 btnNext.Name = "BgNext"
 btnNext.Size = UDim2.new(0, 26, 0, 26)
 btnNext.Position = UDim2.new(1, -28, 0.5, -13)
-btnNext.BackgroundColor3 = Color3.fromRGB(180, 80, 160)
+btnNext.BackgroundColor3 = Color3.fromRGB(255, 60, 140)
 btnNext.BackgroundTransparency = 0.3
 btnNext.BorderSizePixel = 0
 btnNext.Text = ">"
@@ -6745,9 +6745,9 @@ local TS = TweenService
 local Stats        = game:GetService("Stats")
 local existingStealBar = LP:FindFirstChild("PlayerGui") and LP.PlayerGui:FindFirstChild("StealBarGui")
 if existingStealBar then existingStealBar:Destroy() end
-local THEME_ACCENT        = Color3.fromRGB(240, 150, 210)
-local THEME_ACCENT_BRIGHT = Color3.fromRGB(255, 200, 240)
-local THEME_ACCENT_DIM    = Color3.fromRGB(130, 160, 255)
+local THEME_ACCENT        = Color3.fromRGB(255, 80, 160)
+local THEME_ACCENT_BRIGHT = Color3.fromRGB(255, 200, 225)
+local THEME_ACCENT_DIM    = Color3.fromRGB(255, 40, 120)
 local gui = Instance.new("ScreenGui")
 gui.Name = "StealBarGui"
 gui.ResetOnSpawn = false
@@ -6787,17 +6787,17 @@ end
 -- ═══════════════════════════════════════════════
 --  STEAL BAR  (full redesign)
 -- ═══════════════════════════════════════════════
-local COL_IDLE_BG    = Color3.fromRGB(14,  6,  28)
-local COL_TRACK_BG   = Color3.fromRGB(22, 10,  42)
-local COL_STEAL_LBL  = Color3.fromRGB(255,210,245)
-local COL_IDLE_DIM   = Color3.fromRGB(140, 90,180)
--- Normal fill
-local COL_NORM_A     = Color3.fromRGB(255,140,215)
-local COL_NORM_B     = Color3.fromRGB(190, 80,255)
--- Semi fill
-local COL_SEMI_START = Color3.fromRGB( 70,165,255)
-local COL_SEMI_MID   = Color3.fromRGB(235, 90,210)
-local COL_SEMI_END   = Color3.fromRGB(155, 50,255)
+local COL_IDLE_BG    = Color3.fromRGB(150, 30, 80)
+local COL_TRACK_BG   = Color3.fromRGB(120, 20, 60)
+local COL_STEAL_LBL  = Color3.fromRGB(255, 255, 255)
+local COL_IDLE_DIM   = Color3.fromRGB(255, 140, 190)
+-- Normal fill: vivid pink → soft white-pink
+local COL_NORM_A     = Color3.fromRGB(255, 60, 140)
+local COL_NORM_B     = Color3.fromRGB(255, 200, 225)
+-- Semi fill: deep pink → hot pink → white
+local COL_SEMI_START = Color3.fromRGB(180, 10, 70)
+local COL_SEMI_MID   = Color3.fromRGB(255, 80, 160)
+local COL_SEMI_END   = Color3.fromRGB(255, 230, 240)
 
 -- ── outer card ────────────────────────────────
 local card = Instance.new("Frame", gui)
@@ -6815,28 +6815,28 @@ do
 	end
 end
 card.BackgroundColor3 = COL_IDLE_BG
-card.BackgroundTransparency = 0.04
+card.BackgroundTransparency = 0.05
 local cardCorner = Instance.new("UICorner", card)
 cardCorner.CornerRadius = UDim.new(0, 22)
--- card bg gradient
+-- dark bg with subtle pink gradient
 local cardGrad = Instance.new("UIGradient", card)
 cardGrad.Color = ColorSequence.new({
-	ColorSequenceKeypoint.new(0,   Color3.fromRGB(38, 12, 64)),
-	ColorSequenceKeypoint.new(0.5, Color3.fromRGB(16, 14, 52)),
-	ColorSequenceKeypoint.new(1,   Color3.fromRGB(10, 20, 58)),
+	ColorSequenceKeypoint.new(0,   Color3.fromRGB(255, 80, 160)),
+	ColorSequenceKeypoint.new(0.5, Color3.fromRGB(200, 40, 100)),
+	ColorSequenceKeypoint.new(1,   Color3.fromRGB(150, 30, 80)),
 })
 cardGrad.Rotation = 135
--- card border stroke with gradient
+-- pink glow border
 local cardStroke = Instance.new("UIStroke", card)
 cardStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-cardStroke.Thickness   = 1.6
-cardStroke.Color       = Color3.fromRGB(210,120,255)
-cardStroke.Transparency = 0.12
+cardStroke.Thickness   = 1.8
+cardStroke.Color       = Color3.fromRGB(255, 80, 160)
+cardStroke.Transparency = 0.0
 local cardStrokeGrad = Instance.new("UIGradient", cardStroke)
 cardStrokeGrad.Color = ColorSequence.new({
-	ColorSequenceKeypoint.new(0,   Color3.fromRGB(255,160,240)),
-	ColorSequenceKeypoint.new(0.5, Color3.fromRGB(140, 80,255)),
-	ColorSequenceKeypoint.new(1,   Color3.fromRGB(255,160,240)),
+	ColorSequenceKeypoint.new(0,   Color3.fromRGB(255, 200, 225)),
+	ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 60, 140)),
+	ColorSequenceKeypoint.new(1,   Color3.fromRGB(255, 200, 225)),
 })
 cardStrokeGrad.Rotation = 90
 
@@ -6852,8 +6852,8 @@ watermarkLbl.Size              = UDim2.new(1, -16, 0, 16)
 watermarkLbl.Position          = UDim2.new(0,  8, 1, -20)
 watermarkLbl.BackgroundTransparency = 1
 watermarkLbl.Text              = "R: " .. tostring(autoStealRadius) .. "  |  SPD: " .. string.format("%.1f", normalStealDuration) .. "s"
-watermarkLbl.TextColor3        = Color3.fromRGB(200, 150, 230)
-watermarkLbl.TextTransparency  = 0.45
+watermarkLbl.TextColor3        = Color3.fromRGB(255, 180, 210)
+watermarkLbl.TextTransparency  = 0.35
 watermarkLbl.Font              = Enum.Font.GothamBlack
 watermarkLbl.TextSize          = 10
 watermarkLbl.TextXAlignment    = Enum.TextXAlignment.Center
@@ -6866,7 +6866,7 @@ local modePillLbl  -- hoisted so SetProgress can access it
 local modePill = Instance.new("TextButton")
 modePill.Size             = UDim2.new(0, 70, 0, 20)
 modePill.Position         = UDim2.new(1, -78, 0, 6)
-modePill.BackgroundColor3 = Color3.fromRGB(180, 60, 220)
+modePill.BackgroundColor3 = Color3.fromRGB(255, 40, 120)
 modePill.BackgroundTransparency = 0.28
 modePill.BorderSizePixel  = 0
 modePill.Text             = ""
@@ -6877,15 +6877,15 @@ modePill.Parent           = card
 Instance.new("UICorner", modePill).CornerRadius = UDim.new(1, 0)
 local modePillGrad = Instance.new("UIGradient", modePill)
 modePillGrad.Color = ColorSequence.new({
-	ColorSequenceKeypoint.new(0, Color3.fromRGB(220,100,255)),
-	ColorSequenceKeypoint.new(1, Color3.fromRGB(140, 60,220)),
+	ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 80, 160)),
+	ColorSequenceKeypoint.new(1, Color3.fromRGB(200, 20, 90)),
 })
 modePillGrad.Rotation = 90
 modePillLbl = Instance.new("TextLabel", modePill)
 modePillLbl.Size = UDim2.new(1,0,1,0)
 modePillLbl.BackgroundTransparency = 1
 modePillLbl.Text      = (selectedStealMode == "Semi") and "SEMI" or "NORMAL"
-modePillLbl.TextColor3 = Color3.fromRGB(255,235,255)
+modePillLbl.TextColor3 = Color3.fromRGB(255, 255, 255)
 modePillLbl.Font      = Enum.Font.GothamBlack
 modePillLbl.TextSize  = 10
 modePillLbl.ZIndex    = 7
@@ -6893,8 +6893,8 @@ local function refreshPill()
 	local isSemi = selectedStealMode == "Semi"
 	modePillLbl.Text = isSemi and "SEMI" or "NORMAL"
 	modePillGrad.Color = ColorSequence.new({
-		ColorSequenceKeypoint.new(0, isSemi and Color3.fromRGB(80,170,255) or Color3.fromRGB(220,100,255)),
-		ColorSequenceKeypoint.new(1, isSemi and Color3.fromRGB(40,100,220) or Color3.fromRGB(140,60,220)),
+		ColorSequenceKeypoint.new(0, isSemi and Color3.fromRGB(255, 200, 225) or Color3.fromRGB(255, 80, 160)),
+		ColorSequenceKeypoint.new(1, isSemi and Color3.fromRGB(255, 80, 160) or Color3.fromRGB(200, 20, 90)),
 	})
 end
 _G.AceStealBarRefreshPill = refreshPill
@@ -6929,20 +6929,20 @@ stealLbl.ZIndex            = 6
 local statsBg = Instance.new("Frame", card)
 statsBg.Size             = UDim2.new(0, 120, 0, 22)
 statsBg.Position         = UDim2.new(0.5, -60, 0, 7)
-statsBg.BackgroundColor3 = Color3.fromRGB(30, 12, 50)
-statsBg.BackgroundTransparency = 0.28
+statsBg.BackgroundColor3 = Color3.fromRGB(255, 60, 140)
+statsBg.BackgroundTransparency = 0.15
 statsBg.BorderSizePixel  = 0
 statsBg.ZIndex           = 5
 Instance.new("UICorner", statsBg).CornerRadius = UDim.new(1, 0)
 local statsBgStroke = Instance.new("UIStroke", statsBg)
-statsBgStroke.Color = Color3.fromRGB(180, 100, 240)
+statsBgStroke.Color = Color3.fromRGB(255, 80, 160)
 statsBgStroke.Thickness = 1
 statsBgStroke.Transparency = 0.5
 local statsLbl = Instance.new("TextLabel", statsBg)
 statsLbl.Size             = UDim2.new(1,0,1,0)
 statsLbl.BackgroundTransparency = 1
 statsLbl.Text             = "FPS: -- | PING: --"
-statsLbl.TextColor3       = Color3.fromRGB(220, 190, 255)
+statsLbl.TextColor3       = Color3.fromRGB(255, 255, 255)
 statsLbl.Font             = Enum.Font.GothamSemibold
 statsLbl.TextSize         = 10
 statsLbl.ZIndex           = 6
@@ -6960,12 +6960,12 @@ local trackCorner = Instance.new("UICorner", track)
 trackCorner.CornerRadius = UDim.new(0, 15)
 local trackGrad = Instance.new("UIGradient", track)
 trackGrad.Color = ColorSequence.new({
-	ColorSequenceKeypoint.new(0, Color3.fromRGB(44, 16, 72)),
-	ColorSequenceKeypoint.new(1, Color3.fromRGB(16, 24, 72)),
+	ColorSequenceKeypoint.new(0, Color3.fromRGB(130, 25, 65)),
+	ColorSequenceKeypoint.new(1, Color3.fromRGB(100, 15, 50)),
 })
 trackGrad.Rotation = 90
 local trackStroke = Instance.new("UIStroke", track)
-trackStroke.Color       = Color3.fromRGB(180, 100, 240)
+trackStroke.Color       = Color3.fromRGB(255, 80, 160)
 trackStroke.Thickness   = 1
 trackStroke.Transparency = 0.55
 
@@ -7000,7 +7000,7 @@ local pctLbl = Instance.new("TextLabel", track)
 pctLbl.Size              = UDim2.new(1,0,1,0)
 pctLbl.BackgroundTransparency = 1
 pctLbl.Text              = "0%"
-pctLbl.TextColor3        = Color3.fromRGB(255,240,255)
+pctLbl.TextColor3        = Color3.fromRGB(255, 255, 255)
 pctLbl.TextStrokeColor3  = Color3.fromRGB(0,0,0)
 pctLbl.TextStrokeTransparency = 0.3
 pctLbl.Font              = Enum.Font.GothamBlack
@@ -7014,7 +7014,7 @@ local function applyFillColors(p)
 			ColorSequenceKeypoint.new(0, COL_NORM_A),
 			ColorSequenceKeypoint.new(1, COL_NORM_B),
 		})
-		cardStroke.Color = Color3.fromRGB(210,120,255)
+		cardStroke.Color = Color3.fromRGB(255, 80, 160)
 	else
 		local function lerpC(a,b,t)
 			return Color3.new(a.R+(b.R-a.R)*t, a.G+(b.G-a.G)*t, a.B+(b.B-a.B)*t)
@@ -7037,19 +7037,19 @@ local barState = "IDLE"
 function setBarState(state)
 	barState = state
 	if state == "STEALING" then
-		TS:Create(stealLbl,  TweenInfo.new(0.15), {TextColor3 = Color3.fromRGB(255,230,255)}):Play()
-		TS:Create(track,     TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(40,14,65)}):Play()
-		TS:Create(cardStroke,TweenInfo.new(0.15), {Transparency = 0.0}):Play()
+		TS:Create(stealLbl,  TweenInfo.new(0.15), {TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
+		TS:Create(track,     TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(160, 40, 90)}):Play()
+		TS:Create(cardStroke,TweenInfo.new(0.15), {Color = Color3.fromRGB(255, 80, 160), Transparency = 0.0}):Play()
 	elseif state == "READY" then
-		TS:Create(stealLbl,  TweenInfo.new(0.15), {TextColor3 = Color3.fromRGB(180,255,180)}):Play()
+		TS:Create(stealLbl,  TweenInfo.new(0.15), {TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
 		pctLbl.Text      = "READY"
-		pctLbl.TextColor3 = Color3.fromRGB(180,255,180)
+		pctLbl.TextColor3 = Color3.fromRGB(255, 255, 255)
 	else
 		TS:Create(stealLbl,  TweenInfo.new(0.15), {TextColor3 = COL_IDLE_DIM}):Play()
 		TS:Create(track,     TweenInfo.new(0.15), {BackgroundColor3 = COL_TRACK_BG}):Play()
-		TS:Create(cardStroke,TweenInfo.new(0.15), {Color = Color3.fromRGB(210,120,255), Transparency = 0.12}):Play()
+		TS:Create(cardStroke,TweenInfo.new(0.15), {Color = Color3.fromRGB(255, 80, 160), Transparency = 0.0}):Play()
 		pctLbl.Text       = "0%"
-		pctLbl.TextColor3 = Color3.fromRGB(255,240,255)
+		pctLbl.TextColor3 = Color3.fromRGB(255, 255, 255)
 	end
 end
 
@@ -7084,7 +7084,7 @@ function StealBar.SetProgress(p)
 	}):Play()
 	if barState ~= "READY" then
 		pctLbl.Text      = math.floor(p*100+0.5) .. "%"
-		pctLbl.TextColor3 = Color3.fromRGB(255,240,255)
+		pctLbl.TextColor3 = Color3.fromRGB(255, 255, 255)
 	end
 	modePillLbl.Text = (selectedStealMode == "Semi") and "SEMI" or "NORMAL"
 	pcall(applyFillColors, p)
@@ -7204,8 +7204,8 @@ _G.__AceDuelsRunIntro = function()
 			local g = Instance.new("UIGradient", titleSplash)
 			g.Color = ColorSequence.new({
 				ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 80, 180)),
-				ColorSequenceKeypoint.new(0.5, Color3.fromRGB(180, 100, 255)),
-				ColorSequenceKeypoint.new(1, Color3.fromRGB(80, 160, 255))
+				ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 80, 160)),
+				ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 60, 140))
 			})
 		end
 
@@ -7214,7 +7214,7 @@ _G.__AceDuelsRunIntro = function()
 		subSplash.Position = UDim2.new(0,0,0,72)
 		subSplash.BackgroundTransparency = 1
 		subSplash.Text = "Duels Edition"
-		subSplash.TextColor3 = Color3.fromRGB(200, 120, 255)
+		subSplash.TextColor3 = Color3.fromRGB(255, 100, 180)
 		subSplash.Font = Enum.Font.Gotham
 		subSplash.TextSize = 13
 		subSplash.TextTransparency = 0
@@ -7224,11 +7224,11 @@ _G.__AceDuelsRunIntro = function()
 		local fragTexts = {"BL","OO","MX"," D","UE","L"}
 		local fragColors = {
 			Color3.fromRGB(255, 80, 180),
-			Color3.fromRGB(220, 100, 255),
-			Color3.fromRGB(180, 120, 255),
-			Color3.fromRGB(120, 140, 255),
-			Color3.fromRGB(80, 180, 255),
-			Color3.fromRGB(160, 220, 255),
+			Color3.fromRGB(255, 100, 180),
+			Color3.fromRGB(255, 100, 180),
+			Color3.fromRGB(255, 160, 200),
+			Color3.fromRGB(255, 80, 160),
+			Color3.fromRGB(255, 200, 225),
 		}
 		for i, txt in ipairs(fragTexts) do
 			local frag = Instance.new("TextLabel", splashGui)
@@ -7280,7 +7280,7 @@ _G.__AceDuelsRunIntro = function()
 			pcall(playGlitchImpact)
 			local flash = Instance.new("Frame", splashGui)
 			flash.Size = UDim2.new(1,0,1,0)
-			flash.BackgroundColor3 = Color3.fromRGB(255, 120, 220)
+			flash.BackgroundColor3 = Color3.fromRGB(255, 80, 160)
 			flash.BackgroundTransparency = 0.3
 			flash.BorderSizePixel = 0
 			flash.ZIndex = 8
@@ -7739,16 +7739,12 @@ local holder = btn.Parent
 local glow = holder and holder:FindFirstChild("Glow")
 local st = btn:FindFirstChildOfClass("UIStroke")
 TS:Create(btn, TweenInfo.new(0.18), {
-BackgroundColor3 = state and Color3.fromRGB(238,238,238) or Color3.fromRGB(8,8,8),
-TextColor3 = state and Color3.fromRGB(0,0,0) or Color3.fromRGB(225,225,225),
+BackgroundColor3 = state and Color3.fromRGB(255, 80, 160) or Color3.fromRGB(150, 30, 80),
+TextColor3 = Color3.fromRGB(255, 255, 255),
 TextTransparency = 0,
 }):Play()
 if st then
-TS:Create(st, TweenInfo.new(0.18), {
-Color = state and Color3.fromRGB(190,190,190) or Color3.fromRGB(85,85,85),
-Thickness = 1,
-Transparency = state and 0 or 0.4,
-}):Play()
+TS:Create(st, TweenInfo.new(0.18), {Transparency = 1}):Play()
 end
 if glow then
 glow.Visible = false
@@ -7797,11 +7793,13 @@ local btn = Instance.new("TextButton", holder)
 btn.Name = "MB_" .. key
 btn.Size = UDim2.new(1, 0, 1, 0)
 btn.Position = UDim2.new(0, 0, 0, 0)
-btn.BackgroundColor3 = Color3.fromRGB(160, 60, 140)
-btn.BackgroundTransparency = 0.1
+btn.BackgroundColor3 = Color3.fromRGB(255, 80, 160)
+btn.BackgroundTransparency = 0.0
 btn.BorderSizePixel = 0
 btn.Text = label
-btn.TextColor3 = Color3.fromRGB(255,240,255)
+btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+btn.TextStrokeColor3 = Color3.fromRGB(80, 0, 40)
+btn.TextStrokeTransparency = 0.0
 btn.Font = Enum.Font.GothamBlack
 btn.TextSize = 10
 btn.TextWrapped = true
@@ -7810,33 +7808,20 @@ btn.ZIndex = 1002
 btn.Active = true
 Instance.new("UICorner", btn).CornerRadius = UDim.new(0, btnShapeCfg.corner)
 holder.Size = UDim2.new(0, btnShapeCfg.w, 0, btnShapeCfg.h)
-local btnGradMobile = Instance.new("UIGradient", btn)
-btnGradMobile.Color = ColorSequence.new({
-ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 140, 200)),
-ColorSequenceKeypoint.new(1, Color3.fromRGB(100, 160, 255)),
-})
-btnGradMobile.Rotation = 135
-btnGradMobile.Transparency = NumberSequence.new({
-NumberSequenceKeypoint.new(0, 0.1),
-NumberSequenceKeypoint.new(1, 0.1),
-})
-local stroke = Instance.new("UIStroke", btn)
-stroke.Color = Color3.fromRGB(255, 160, 220)
-stroke.Thickness = 1.2
-stroke.Transparency = 0.1
-stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 local pressing, dragging = false, false
 local pressPos, holderStart = nil, nil
 -- Inisialisasi ke off state langsung
 btn:SetAttribute("AceMobilePressed", false)
 btn:SetAttribute("AceMobileVisualState", nil)
-btn.BackgroundColor3 = Color3.fromRGB(8, 8, 8)
-btn.TextColor3 = Color3.fromRGB(225, 225, 225)
+btn.BackgroundColor3 = Color3.fromRGB(150, 30, 80)
+btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+btn.TextStrokeColor3 = Color3.fromRGB(80, 0, 40)
+btn.TextStrokeTransparency = 0.0
 local st = btn:FindFirstChildOfClass("UIStroke")
 if st then
-st.Color = Color3.fromRGB(85, 85, 85)
-st.Thickness = 1
-st.Transparency = 0.4
+st.Color = Color3.fromRGB(255, 80, 160)
+st.Thickness = 1.2
+st.Transparency = 0.2
 end
 btn.InputBegan:Connect(function(i)
 if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
