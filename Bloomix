@@ -11,6 +11,20 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local SoundService = game:GetService("SoundService")
 local LP = Players.LocalPlayer
 local PlayerGui = LP:WaitForChild("PlayerGui")
+-- Impulse-based velocity helpers (from new speed logic)
+local function applyImpulseForVelocity(hrp, desiredVelocity)
+if not hrp then return end
+local mass = hrp.AssemblyMass
+local currentVel = hrp.AssemblyLinearVelocity
+local impulse = (desiredVelocity - currentVel) * mass
+hrp:ApplyImpulse(impulse)
+end
+local function applyImpulseZero(hrp)
+if not hrp then return end
+local mass = hrp.AssemblyMass
+local currentVel = hrp.AssemblyLinearVelocity
+hrp:ApplyImpulse(-currentVel * mass)
+end
 _G.AceIsMobile = true
 _G.AceCursedResetRemote = _G.AceCursedResetRemote or nil
 _G.AceCursedResetGuid = _G.AceCursedResetGuid or "f888ee6e-c86d-46e1-93d7-0639d6635d42"
@@ -568,7 +582,8 @@ local char = LP.Character
 local root = char and char:FindFirstChild("HumanoidRootPart")
 local hum = char and char:FindFirstChildOfClass("Humanoid")
 if not root or not hum or hum.Health <= 0 then return end
-root.Velocity = Vector3.new(root.Velocity.X, boost or 50, root.Velocity.Z)
+local currentVelJ = root.AssemblyLinearVelocity
+applyImpulseForVelocity(root, Vector3.new(currentVelJ.X, boost or 50, currentVelJ.Z))
 end
 UserInputService.JumpRequest:Connect(function()
 _G.AceApplyNormalInfJumpBoost(50)
@@ -2764,12 +2779,6 @@ saveAceConfig()
 end
 end)
 local lastMoveDir = Vector3.new(0, 0, 0)
-local MOVE_KEYS = {
-    [Enum.KeyCode.W]=true,[Enum.KeyCode.A]=true,
-    [Enum.KeyCode.S]=true,[Enum.KeyCode.D]=true,
-    [Enum.KeyCode.Up]=true,[Enum.KeyCode.Left]=true,
-    [Enum.KeyCode.Down]=true,[Enum.KeyCode.Right]=true
-}
 local function getCurrentSpeedValue()
 if currentSpeedMode == "Carry" then
 return CS
@@ -2809,12 +2818,18 @@ else
 setSpeedMode("Lagger Carry")
 end
 end
+-- State table for carry/lagger tracking
 State = State or {}
 State.normalSpeed = NS
 State.carrySpeed = CS
 State.laggerSpeed = LAGGER_SPEED
 State.speedToggled = (currentSpeedMode == "Carry" or currentSpeedMode == "Lagger Carry")
 State.laggerEnabled = (currentSpeedMode == "Lagger" or currentSpeedMode == "Lagger Carry")
+State._autoCarryFromSteal = State._autoCarryFromSteal or false
+State._autoCarryGraceUntil = State._autoCarryGraceUntil or 0
+State._waitingForCarryPickup = State._waitingForCarryPickup or false
+State._carryPickupWatchUntil = State._carryPickupWatchUntil or 0
+State._autoCarryReturnMode = State._autoCarryReturnMode or nil
 toggleRefs = toggleRefs or {}
 function setCarry(on)
 if on then
@@ -2836,67 +2851,30 @@ end
 end
 State.laggerEnabled = on == true
 end
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local LP = Players.LocalPlayer
-State = State or {}
-State.normalSpeed = State.normalSpeed or 59
-State.carrySpeed = State.carrySpeed or 30
-State.laggerSpeed = State.laggerSpeed or 60
-State.speedToggled = State.speedToggled or false
-State.laggerEnabled = State.laggerEnabled or false
-State._autoCarryFromSteal = State._autoCarryFromSteal or false
-State._autoCarryGraceUntil = State._autoCarryGraceUntil or 0
-State._waitingForCarryPickup = State._waitingForCarryPickup or false
-State._carryPickupWatchUntil = State._carryPickupWatchUntil or 0
-State._autoCarryReturnMode = State._autoCarryReturnMode or nil
-toggleRefs = toggleRefs or {}
-local function safeSaveConfig()
-if type(saveConfig) == "function" then
-task.spawn(saveConfig)
-end
-end
 local function isCarryName(name)
 local n = tostring(name or ""):lower()
-return n:find("brainrot")
-or n:find("animal")
-or n:find("carry")
-or n:find("grab")
-or n:find("steal")
-or n:find("hold")
+return n:find("brainrot") or n:find("animal") or n:find("carry")
+or n:find("grab") or n:find("steal") or n:find("hold")
 end
 local function isIgnoredCarryTool(name)
 local n = tostring(name or ""):lower()
-return n:find("bat")
-or n:find("slap")
-or n:find("medusa")
-or n:find("head")
-or n:find("stone")
+return n:find("bat") or n:find("slap") or n:find("medusa")
+or n:find("head") or n:find("stone")
 end
 local function isCarryingBrainrot(char)
 if not char then return false end
-for _, name in ipairs({"Carrying", "IsCarrying", "Grabbed", "Holding", "StealHold", "HasGrab"}) do
+for _, name in ipairs({"Carrying","IsCarrying","Grabbed","Holding","StealHold","HasGrab"}) do
 local v = char:FindFirstChild(name, true)
 if v then
-if v:IsA("BoolValue") and v.Value then
-return true
-end
-if v:IsA("ObjectValue") and v.Value then
-return true
-end
-if v:IsA("StringValue") and v.Value ~= "" then
-return true
-end
+if v:IsA("BoolValue") and v.Value then return true end
+if v:IsA("ObjectValue") and v.Value then return true end
+if v:IsA("StringValue") and v.Value ~= "" then return true end
 end
 end
 for _, child in ipairs(char:GetChildren()) do
 if child:IsA("Model") and child:FindFirstChildWhichIsA("BasePart", true) then
-if child:FindFirstChildOfClass("Humanoid") and child:FindFirstChild("HumanoidRootPart") then
-return true
-end
-if isCarryName(child.Name) then
-return true
-end
+if child:FindFirstChildOfClass("Humanoid") and child:FindFirstChild("HumanoidRootPart") then return true end
+if isCarryName(child.Name) then return true end
 elseif child:IsA("Tool") and not isIgnoredCarryTool(child.Name) then
 return true
 end
@@ -2905,21 +2883,13 @@ return false
 end
 local function setCarrySpeedMode(on)
 State.speedToggled = on
-if toggleRefs.carryMode then
-toggleRefs.carryMode(on)
-end
-if type(setCarry) == "function" then
-setCarry(on)
-end
+if toggleRefs.carryMode then toggleRefs.carryMode(on) end
+if type(setCarry) == "function" then setCarry(on) end
 end
 local function setLaggerMode(on)
 State.laggerEnabled = on
-if toggleRefs.laggerMode then
-toggleRefs.laggerMode(on)
-end
-if type(setLagger) == "function" then
-setLagger(on)
-end
+if toggleRefs.laggerMode then toggleRefs.laggerMode(on) end
+if type(setLagger) == "function" then setLagger(on) end
 end
 local function enableCarrySpeedForSteal()
 State._waitingForCarryPickup = false
@@ -2941,7 +2911,7 @@ else
 setLaggerMode(false)
 setCarrySpeedMode(true)
 end
-safeSaveConfig()
+saveAceConfig()
 end
 local function disableAutoCarrySpeed()
 if not State._autoCarryFromSteal and not State._waitingForCarryPickup then return end
@@ -2952,9 +2922,7 @@ State._waitingForCarryPickup = false
 State._autoCarryGraceUntil = 0
 State._carryPickupWatchUntil = 0
 State._autoCarryReturnMode = nil
-if not wasAutoApplied then
-return
-end
+if not wasAutoApplied then return end
 if returnMode == "Lagger" or returnMode == "Lagger Carry" then
 State.laggerEnabled = true
 State.speedToggled = false
@@ -2971,7 +2939,7 @@ else
 setLaggerMode(false)
 setCarrySpeedMode(false)
 end
-safeSaveConfig()
+saveAceConfig()
 end
 local function startAutoCarryPickupWatch(seconds)
 if autoCarrySpeedEnabled ~= true then return end
@@ -2979,6 +2947,50 @@ State._waitingForCarryPickup = true
 State._carryPickupWatchUntil = tick() + (seconds or 1.25)
 end
 local _stealAttrWasActive = false
+-- AutoCarry RenderStepped
+RunService.RenderStepped:Connect(function()
+if autoCarrySpeedEnabled ~= true then
+disableAutoCarrySpeed()
+return
+end
+local char = LP.Character
+local hum = char and char:FindFirstChildOfClass("Humanoid")
+local root = char and char:FindFirstChild("HumanoidRootPart")
+if not char or not hum or not root then
+disableAutoCarrySpeed()
+_stealAttrWasActive = false
+return
+end
+local st = hum:GetState()
+local gotHit = st == Enum.HumanoidStateType.Physics
+or st == Enum.HumanoidStateType.Ragdoll
+or st == Enum.HumanoidStateType.FallingDown
+local stealingAttr = LP:GetAttribute("Stealing") == true
+local carryingBrainrot = isCarryingBrainrot(char)
+if stealingAttr and not _stealAttrWasActive then
+_stealAttrWasActive = true
+enableCarrySpeedForSteal()
+elseif not stealingAttr then
+_stealAttrWasActive = false
+end
+if State._waitingForCarryPickup then
+if gotHit or tick() > (State._carryPickupWatchUntil or 0) then
+State._waitingForCarryPickup = false
+State._carryPickupWatchUntil = 0
+elseif carryingBrainrot then
+enableCarrySpeedForSteal()
+end
+end
+if carryingBrainrot and not State._autoCarryFromSteal then
+enableCarrySpeedForSteal()
+end
+if State._autoCarryFromSteal then
+local graceDone = tick() > (State._autoCarryGraceUntil or 0)
+if gotHit or (graceDone and not carryingBrainrot and not stealingAttr) then
+disableAutoCarrySpeed()
+end
+end
+end)
 RunService.RenderStepped:Connect(function()
 if autoCarrySpeedEnabled ~= true then
 disableAutoCarrySpeed()
@@ -3448,19 +3460,11 @@ local spd = getCurrentSpeedValue()
 if not autoLeftEnabled and not autoRightEnabled and not (_G.AceNormalAimbotOn or _G.AceAntiBypassAimbotOn or _G.AceAntiDesyncAimbotOn) then
 if md.Magnitude > 0 then
 lastMoveDir = md
-hrp.Velocity = Vector3.new(md.X * spd, hrp.Velocity.Y, md.Z * spd)
-else
-local anyHeld = false
-for key in pairs(MOVE_KEYS) do
-if UIS:IsKeyDown(key) then anyHeld = true; break end
-end
-if anyHeld and lastMoveDir.Magnitude > 0 then
-hrp.Velocity = Vector3.new(lastMoveDir.X * spd, hrp.Velocity.Y, lastMoveDir.Z * spd)
-end
+hrp.AssemblyLinearVelocity = Vector3.new(md.X * spd, hrp.AssemblyLinearVelocity.Y, md.Z * spd)
 end
 end
 if overheadSpeedLabel then
-local v = hrp.AssemblyLinearVelocity or hrp.Velocity
+local v = hrp.AssemblyLinearVelocity
 local speedMag = Vector3.new(v.X, 0, v.Z).Magnitude
 local rounded = math.floor(speedMag * 10 + 0.5) / 10
 if math.abs(rounded - math.floor(rounded)) < 0.05 then
