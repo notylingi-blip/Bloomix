@@ -109,6 +109,8 @@ local showTracerEnabled = false
 local ragdollCountdownEnabled = false
 local waitRagdollToSteal = false
 local waitRagdollToStealBlockedUntil = 0
+local autoTpBatIfRagdoll = false
+local autoTpBatTask = nil
 local fpsBoostEnabled = false
 local antiLagVisualEnabled = false
 local nukeOptimiserEnabled = false
@@ -918,6 +920,7 @@ espEnabled = espEnabled,
 showTracerEnabled = showTracerEnabled,
 ragdollCountdownEnabled = ragdollCountdownEnabled,
 waitRagdollToSteal = waitRagdollToSteal,
+autoTpBatIfRagdoll = autoTpBatIfRagdoll,
 fpsBoostEnabled = fpsBoostEnabled,
 antiLagVisualEnabled = antiLagVisualEnabled,
 nukeOptimiserEnabled = nukeOptimiserEnabled,
@@ -1032,6 +1035,7 @@ autoResetOnMedEnabled = data.autoResetOnMedEnabled == true
 espEnabled = data.espEnabled == true
 showTracerEnabled = false
 waitRagdollToSteal = data.waitRagdollToSteal == true
+autoTpBatIfRagdoll = data.autoTpBatIfRagdoll == true
 ragdollCountdownEnabled = data.ragdollCountdownEnabled == true
 fpsBoostEnabled = data.fpsBoostEnabled == true
 antiLagVisualEnabled = data.antiLagVisualEnabled == true
@@ -3373,11 +3377,23 @@ if ragdollCountdownEnabled then hookRagdollCountdown(char) end
 local hum = char:FindFirstChildOfClass("Humanoid") or char:WaitForChild("Humanoid", 5)
 if hum then
 hum.StateChanged:Connect(function(_, newState)
-if waitRagdollToSteal then
 if newState == Enum.HumanoidStateType.Physics
 or newState == Enum.HumanoidStateType.Ragdoll
 or newState == Enum.HumanoidStateType.FallingDown then
+if waitRagdollToSteal then
 waitRagdollToStealBlockedUntil = tick() + 0.7
+end
+if autoTpBatIfRagdoll then
+if autoTpBatTask then task.cancel(autoTpBatTask); autoTpBatTask = nil end
+if _G.AceStartAntiDesyncAimbot and not _G.AceAntiDesyncAimbotOn then
+_G.AceStartAntiDesyncAimbot()
+end
+autoTpBatTask = task.delay(1, function()
+autoTpBatTask = nil
+if _G.AceStopAntiDesyncAimbot and _G.AceAntiDesyncAimbotOn then
+_G.AceStopAntiDesyncAimbot()
+end
+end)
 end
 end
 end)
@@ -3390,11 +3406,23 @@ if char then
 local hum = char:FindFirstChildOfClass("Humanoid")
 if hum then
 hum.StateChanged:Connect(function(_, newState)
-if waitRagdollToSteal then
 if newState == Enum.HumanoidStateType.Physics
 or newState == Enum.HumanoidStateType.Ragdoll
 or newState == Enum.HumanoidStateType.FallingDown then
+if waitRagdollToSteal then
 waitRagdollToStealBlockedUntil = tick() + 0.7
+end
+if autoTpBatIfRagdoll then
+if autoTpBatTask then task.cancel(autoTpBatTask); autoTpBatTask = nil end
+if _G.AceStartAntiDesyncAimbot and not _G.AceAntiDesyncAimbotOn then
+_G.AceStartAntiDesyncAimbot()
+end
+autoTpBatTask = task.delay(1, function()
+autoTpBatTask = nil
+if _G.AceStopAntiDesyncAimbot and _G.AceAntiDesyncAimbotOn then
+_G.AceStopAntiDesyncAimbot()
+end
+end)
 end
 end
 end)
@@ -4895,6 +4923,23 @@ waitRagdollToStealBlockedUntil = 0
 end
 saveAceConfig()
 end)
+end
+do
+local atbRow, setAtbVisual = toggleRow(Combat, "Auto Tp Bat If Ragdoll", autoTpBatIfRagdoll, 3.3)
+local atbBtn = atbRow and atbRow:FindFirstChild("ToggleButton")
+if atbBtn then
+atbBtn.Activated:Connect(function()
+autoTpBatIfRagdoll = not autoTpBatIfRagdoll
+setAtbVisual(autoTpBatIfRagdoll)
+if not autoTpBatIfRagdoll then
+if autoTpBatTask then task.cancel(autoTpBatTask); autoTpBatTask = nil end
+if _G.AceStopAntiDesyncAimbot and _G.AceAntiDesyncAimbotOn then
+_G.AceStopAntiDesyncAimbot()
+end
+end
+saveAceConfig()
+end)
+end
 end
 end
 if stealDurRow then
